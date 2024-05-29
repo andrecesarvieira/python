@@ -47,8 +47,8 @@ class CalculadoraLayoutCOBOL:
         self.frame_arvore.grid_columnconfigure(0, weight=1)
 
     def calcularArea(self):
-        codigo_cobol = self.area_texto.get(1.0, tk.END)
-        area_total, campos = calcularAreaTotal(codigo_cobol)
+        area_cobol = self.area_texto.get(1.0, tk.END)
+        area_total, campos = calcularAreaTotal(area_cobol)
         self.label_resultado.config(text=f"Área total do layout: {area_total}")
         self.exibirCampos(campos)
 

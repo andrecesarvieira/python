@@ -1,10 +1,10 @@
 import re
 
 
-def calcularAreaTotal(codigo_cobol):
+def calcularAreaTotal(area_cobol):
     total_area = 0
     campos = []
-    linhas = codigo_cobol.split('\n')
+    linhas = area_cobol.split('\n')
     redefined_fields = set()
     in_redefines_block = False
     redefines_indentation = 0
