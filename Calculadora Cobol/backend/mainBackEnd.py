@@ -9,25 +9,25 @@ def calcularAreaTotal(codigo_cobol):
     in_redefines_block = False
     redefines_indentation = 0
 
-    for line in linhas:
+    for linha in linhas:
         match_redefines = re.match(
-            r'\s*(\d+)\s+(\S+)\s+REDEFINES\s+(\S+)\.', line)
+            r'\s*(\d+)\s+(\S+)\s+REDEFINES\s+(\S+)\.', linha)
         if match_redefines:
             redefined_name = match_redefines.group(3)
             redefined_fields.add(redefined_name)
             in_redefines_block = True
-            redefines_indentation = len(re.match(r'(\s*)', line).group(1))
+            redefines_indentation = len(re.match(r'(\s*)', linha).group(1))
             continue
 
         if in_redefines_block:
-            line_indentation = len(re.match(r'(\s*)', line).group(1))
+            line_indentation = len(re.match(r'(\s*)', linha).group(1))
             if line_indentation <= redefines_indentation:
                 in_redefines_block = False
             else:
                 continue
 
         match_field = re.match(
-            r'\s*(\d+)\s+(\S+)\s+PIC\s+([9X])(?:\((\d+)\))?(?:\s+(?:OCCURS|OC)\s+(\d+))?(?:\s+DEPENDING\s+ON\s+(\S+))?(?:\s+(BINARY|COMP(?:-2|-3|-4|-5)?))?', line)
+            r'\s*(\d+)\s+(\S+)\s+PIC\s+([9X])(?:\((\d+)\))?(?:\s+(?:OCCURS|OC)\s+(\d+))?(?:\s+DEPENDING\s+ON\s+(\S+))?(?:\s+(BINARY|COMP(?:-2|-3|-4|-5)?))?', linha)
         if match_field:
             name = match_field.group(2)
             field_type = match_field.group(3)
