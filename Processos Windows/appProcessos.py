@@ -7,11 +7,13 @@ from tkinter import messagebox, ttk
 import ctypes
 import sys
 
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
+
 
 def run_as_admin():
     if not is_admin():
@@ -22,23 +24,28 @@ def run_as_admin():
             print(f"Erro ao tentar elevar o script: {e}")
         sys.exit(0)
 
+
 def obter_configuracao(servico_nome):
     try:
         config_servico = win32service.QueryServiceConfig(win32service.OpenService(
-            win32service.OpenSCManager(None, None, win32service.SC_MANAGER_ALL_ACCESS),
+            win32service.OpenSCManager(
+                None, None, win32service.SC_MANAGER_ALL_ACCESS),
             servico_nome,
             win32service.SERVICE_QUERY_CONFIG
         ))
         tipo_inicio = config_servico[1]
         return tipo_inicio
     except Exception as e:
-        print(f"Erro ao obter configuração do serviço {servico_nome}: {e}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao obter configuração do serviço {servico_nome}: {e}")
         return None
+
 
 def obter_descricao(servico_nome):
     try:
         descricao_servico = win32service.QueryServiceConfig2(win32service.OpenService(
-            win32service.OpenSCManager(None, None, win32service.SC_MANAGER_ALL_ACCESS),
+            win32service.OpenSCManager(
+                None, None, win32service.SC_MANAGER_ALL_ACCESS),
             servico_nome,
             win32service.SERVICE_CONFIG_DESCRIPTION
         ), win32service.SERVICE_CONFIG_DESCRIPTION)
@@ -47,11 +54,14 @@ def obter_descricao(servico_nome):
     except win32api.error as e:
         if e.winerror == 15100:
             return "Descrição não disponível"
-        print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")
         return "Descrição não disponível"
     except Exception as e:
-        print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")
         return "Descrição não disponível"
+
 
 def obter_status(servico_nome):
     status_servico = win32serviceutil.QueryServiceStatus(servico_nome)[1]
@@ -66,12 +76,15 @@ def obter_status(servico_nome):
     }.get(status_servico, "Desconhecido")
     return status
 
+
 def listar_servicos():
     try:
-        servicos = win32service.EnumServicesStatus(win32service.OpenSCManager(None, None, win32service.SC_MANAGER_ALL_ACCESS))
+        servicos = win32service.EnumServicesStatus(
+            win32service.OpenSCManager(None, None, win32service.SC_MANAGER_ALL_ACCESS))
     except win32api.error as e:
         if e.winerror == 5:
-            messagebox.showerror("Erro", "Acesso negado. Por favor, execute o script como administrador.")
+            messagebox.showerror(
+                "Erro", "Acesso negado. Por favor, execute o script como administrador.")
         else:
             messagebox.showerror("Erro", e.strerror)
         return []
@@ -105,6 +118,7 @@ def listar_servicos():
 
     return tabela_servicos
 
+
 def desabilitar_servico(servico):
     nome_servico = servico.get("nome", "")
     status_servico = servico.get("status", "")
@@ -114,23 +128,30 @@ def desabilitar_servico(servico):
         comando = ["sc", "config", nome_servico, "start=demand"]
         resultado = subprocess.run(comando, capture_output=True, text=True)
         if resultado.returncode != 0:
-            print(f"Erro ao desabilitar o serviço {nome_servico}: {resultado.stderr}")
+            print(
+                f"Erro ao desabilitar o serviço {nome_servico}: {resultado.stderr}")
     except Exception as e:
-        print(f"Erro ao desabilitar o serviço {nome_servico}: {str(e)}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao desabilitar o serviço {nome_servico}: {str(e)}")
+
 
 def iniciar_servico(servico):
     nome_servico = servico.get("nome", "")
     try:
         win32serviceutil.StartService(nome_servico)
     except Exception as e:
-        print(f"Erro ao iniciar o serviço {nome_servico}: {str(e)}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao iniciar o serviço {nome_servico}: {str(e)}")
+
 
 def parar_servico(servico):
     nome_servico = servico.get("nome", "")
     try:
         win32serviceutil.StopService(nome_servico)
     except Exception as e:
-        print(f"Erro ao parar o serviço {nome_servico}: {str(e)}")  # Apenas informativo
+        # Apenas informativo
+        print(f"Erro ao parar o serviço {nome_servico}: {str(e)}")
+
 
 def atualizar_lista(tree, filtro=""):
     for item in tree.get_children():
@@ -141,7 +162,7 @@ def atualizar_lista(tree, filtro=""):
             filtro.lower() in (servico['nome_exibicao'] or "").lower() or
             filtro.lower() in (servico['descricao'] or "").lower() or
             filtro.lower() in (servico['status'] or "").lower() or
-            filtro.lower() in (servico['tipo_inicio'] or "").lower()):
+                filtro.lower() in (servico['tipo_inicio'] or "").lower()):
             tree.insert("", "end", values=(
                 servico['nome'],
                 servico['nome_exibicao'],
@@ -149,6 +170,7 @@ def atualizar_lista(tree, filtro=""):
                 servico['status'],
                 servico['tipo_inicio']
             ))
+
 
 def criar_gui():
     root = tk.Tk()
@@ -170,7 +192,8 @@ def criar_gui():
     frame = tk.Frame(root)
     frame.pack(fill=tk.BOTH, expand=True)
 
-    columns = ["Nome", "Nome de Exibição", "Descrição", "Status", "Tipo de Início"]
+    columns = ["Nome", "Nome de Exibição",
+               "Descrição", "Status", "Tipo de Início"]
     tree = ttk.Treeview(frame, columns=columns, show="headings")
     tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -182,7 +205,8 @@ def criar_gui():
     tree.column("Tipo de Início", width=100)
 
     for col in columns:
-        tree.heading(col, text=col, command=lambda _col=col: sort_by(tree, _col, False))
+        tree.heading(
+            col, text=col, command=lambda _col=col: sort_by(tree, _col, False))
         tree.column(col, stretch=True)
 
     scrollbar_v = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
@@ -196,13 +220,16 @@ def criar_gui():
     btn_frame = tk.Frame(root)
     btn_frame.pack(fill=tk.X, pady=10)
 
-    btn_iniciar = tk.Button(btn_frame, text="Iniciar Serviço", state=tk.DISABLED, command=lambda: [iniciar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
+    btn_iniciar = tk.Button(btn_frame, text="Iniciar Serviço", state=tk.DISABLED, command=lambda: [
+                            iniciar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
     btn_iniciar.pack(side=tk.LEFT, padx=5)
 
-    btn_parar = tk.Button(btn_frame, text="Parar Serviço", state=tk.DISABLED, command=lambda: [parar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
+    btn_parar = tk.Button(btn_frame, text="Parar Serviço", state=tk.DISABLED, command=lambda: [
+                          parar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
     btn_parar.pack(side=tk.LEFT, padx=5)
 
-    btn_desabilitar = tk.Button(btn_frame, text="Desabilitar Serviço", state=tk.DISABLED, command=lambda: [desabilitar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
+    btn_desabilitar = tk.Button(btn_frame, text="Desabilitar Serviço", state=tk.DISABLED, command=lambda: [
+                                desabilitar_servico(selected_servico), atualizar_lista(tree, search_entry.get())])
     btn_desabilitar.pack(side=tk.LEFT, padx=5)
 
     def on_select(event):
@@ -228,7 +255,8 @@ def criar_gui():
     tree.bind('<<TreeviewSelect>>', on_select)
 
     def sort_by(tree, col, descending):
-        data = [(tree.set(child, col), child) for child in tree.get_children('')]
+        data = [(tree.set(child, col), child)
+                for child in tree.get_children('')]
         data.sort(reverse=descending)
         for indx, item in enumerate(data):
             tree.move(item[1], '', indx)
@@ -240,6 +268,7 @@ def criar_gui():
     search_entry.bind("<KeyRelease>", on_key_release)
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     run_as_admin()
