@@ -5,15 +5,19 @@ Data: 30/05/2024
 """
 from tkinter import *
 
-# Cores
-cor_fundo = "LightGray"
-
 frm_main = Tk()
 
-frm_main.title(string="Janela Principal")
-frm_main.geometry(newGeometry="1280x720")
+# Valores padrões da janela
+frm_title = "Janela Principal"
+frm_size = "1280x720"
+frm_bg = "LightGray"
+frm_icon: PhotoImage = PhotoImage(file="logo.png")
+
+frm_main.iconphoto(False, frm_icon)
+frm_main.title(frm_title)
+frm_main.geometry(frm_size)
 frm_main.resizable(height=False, width=False)
-frm_main.config(background=cor_fundo)
-frm_main.iconphoto(False, PhotoImage(file="icon.png"))
+frm_main.config(background=frm_bg)
+
 
 frm_main.mainloop()
