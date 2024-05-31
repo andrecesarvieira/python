@@ -29,7 +29,6 @@ class App(tk.Tk):
         self.title(string="Login")
         self.iconphoto(False, PhotoImage(file="logo.png"))
         self.resizable(height=False, width=False)
-        self.config(background="lightgray")
 
         # Configurando a grade
         self.grid_columnconfigure(0, weight=1)
@@ -45,11 +44,13 @@ class App(tk.Tk):
 
     def criar_widgets(self):
 
+        fonte = "Noboto 9 bold"
+
         # Criação dos widgets
-        usuario_label = ttk.Label(master=self, text="Usuário:")
-        usuario_entry = ttk.Entry(self)
-        senha_label = ttk.Label(master=self, text="Senha:")
-        senha_entry = ttk.Entry(self)
+        usuario_label = ttk.Label(master=self, text="Usuário:", font=fonte)
+        senha_label = ttk.Label(master=self, text="Senha:", font=fonte)
+        usuario_entry = ttk.Entry(self, font=fonte)
+        senha_entry = ttk.Entry(self, font=fonte)
 
         # Posicionamento dos widgets
         usuario_label.grid(column=1, row=1, padx=5, pady=5, sticky="E")
