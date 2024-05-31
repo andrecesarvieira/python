@@ -3,64 +3,74 @@ Este módulo exibe elementos de tkinter
 Autor: André Vieira
 Data: 30/05/2024
 """
-from tkinter import *
-from tkinter import ttk
+
+import tkinter as tk
+from tkinter import ttk, PhotoImage
 
 
-def criar_janela_principal():
+class App(tk.Tk):
 
-    # Instancia para a classe Tk (janela principal)
-    root = Tk()
+    def __init__(self):
+        super().__init__()
 
-    # Centralizando a janela no monitor
-    root_altura = 300
-    root_largura = 400
+        # Centralizando a janela no monitor
+        altura = 300
+        largura = 400
 
-    tela_largura: int = root.winfo_screenwidth()
-    tela_altura: int = root.winfo_screenheight()
-    # Coordenadas do canto superior esquerdo
-    x_coordenada = int((tela_largura/2) - (root_largura/2))
-    y_coordenada = int((tela_altura/2) - (root_altura/2))
-    root.geometry("{}x{}+{}+{}".format(root_largura,
-                  root_altura, x_coordenada, y_coordenada))
+        tela_largura: int = self.winfo_screenwidth()
+        tela_altura: int = self.winfo_screenheight()
+        # Coordenadas do canto superior esquerdo
+        x_coordenada = int((tela_largura/2) - (largura/2))
+        y_coordenada = int((tela_altura/2) - (altura/2))
+        self.geometry("{}x{}+{}+{}".format(largura,
+                                           altura, x_coordenada, y_coordenada))
 
-    # Atribuindo valores padrões da janela
-    root.title(string="Login")
-    root.iconphoto(False, PhotoImage(file="logo.png"))
-    root.resizable(height=False, width=False)
-    root.configure(background="lightgray")
+        # Atribuindo valores padrões da janela
+        self.title(string="Login")
+        self.iconphoto(False, PhotoImage(file="logo.png"))
+        self.resizable(height=False, width=False)
+        self.config(background="lightgray")
 
-    root.columnconfigure(0, weight=1)
-    root.columnconfigure(1, weight=3)
+        # Configurando a grade
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
 
-    frame = criar_frame(root)
-    frame.grid()
+        self.criar_widgets()
 
-    root.mainloop()
+    def criar_widgets(self):
 
+        # Criação dos widgets
+        usuario_label = ttk.Label(master=self, text="Usuário:")
+        usuario_entry = ttk.Entry(self)
+        senha_label = ttk.Label(master=self, text="Senha:")
+        senha_entry = ttk.Entry(self)
 
-def criar_frame(root):
+        # Posicionamento dos widgets
+        usuario_label.grid(column=1, row=1, padx=5, pady=5, sticky="E")
+        usuario_entry.grid(column=2, row=1, padx=5, pady=5, sticky="W")
+        senha_label.grid(column=1, row=2, padx=5, pady=5, sticky="E")
+        senha_entry.grid(column=2, row=2, padx=5, pady=5, sticky="W")
 
-    # Definindo grid para alocar os widgets
-    frame = ttk.Frame(root)
-    frame.columnconfigure(0, weight=1)
-    frame.columnconfigure(0, weight=3)
+        # Configurando espaçamento extra para centralizar os widgets
+        self.grid_rowconfigure(0, weight=4)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=0)
+        self.grid_rowconfigure(3, weight=4)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        self.grid_columnconfigure(3, weight=1)
 
-    # Alocando widgets no grid
-    ttk.Label(master=frame, text="Usuário:").grid(column=0, row=0, sticky=W)
-    usuario = ttk.Entry(frame, width=30)
-    usuario.grid(column=1, row=0, sticky=W)
-    usuario.focus()
-
-    ttk.Label(master=frame, text="Senha:").grid(column=0, row=1, sticky=W)
-    senha = ttk.Entry(frame, width=30)
-    senha.grid(column=1, row=1, sticky=W)
-
-    for widget in frame.winfo_children():
-        widget.grid(padx=5, pady=5)
-
-    return frame
+        # Foco na caixa de texto do usuário
+        usuario_entry.focus()
 
 
 if __name__ == "__main__":
-    criar_janela_principal()
+    app = App()
+    app.mainloop()
