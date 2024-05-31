@@ -44,13 +44,15 @@ class App(tk.Tk):
 
     def criar_widgets(self):
 
-        fonte = "Noboto 9 bold"
+        fonte_label = "Consolas 11 bold"
+        fonte_entry = "Consolas 11"
 
         # Criação dos widgets
-        usuario_label = ttk.Label(master=self, text="Usuário:", font=fonte)
-        senha_label = ttk.Label(master=self, text="Senha:", font=fonte)
-        usuario_entry = ttk.Entry(self, font=fonte)
-        senha_entry = ttk.Entry(self, font=fonte)
+        usuario_label = ttk.Label(
+            master=self, text="Usuário:", font=fonte_label)
+        senha_label = ttk.Label(master=self, text="Senha:", font=fonte_label)
+        usuario_entry = ttk.Entry(self, font=fonte_entry)
+        senha_entry = ttk.Entry(self, font=fonte_entry)
 
         # Posicionamento dos widgets
         usuario_label.grid(column=1, row=1, padx=5, pady=5, sticky="E")
