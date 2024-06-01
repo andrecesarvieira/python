@@ -1,79 +1,115 @@
 """
-Este módulo exibe elementos de tkinter
+Módulo para criação da estrutura de um App
 Autor: André Vieira
 Data: 30/05/2024
 """
-
 import tkinter as tk
-from tkinter import ttk, PhotoImage
+from tkinter import Label
 
 
-class App(tk.Tk):
+def cria_janela():
 
-    def __init__(self):
-        super().__init__()
+    root = tk.Tk()
+    root.title("App Hub")
+    root.resizable(False, False)
 
-        # Centralizando a janela no monitor
-        altura = 300
-        largura = 400
+    # Centralizando a janela conforme resolução do monitor
+    largura = 1280
+    altura = 720
+    tela_largura: int = root.winfo_screenwidth()
+    tela_altura: int = root.winfo_screenheight() - 80
+    x_coordenada = int((tela_largura/2) - (largura/2))
+    y_coordenada = int((tela_altura/2) - (altura/2))
+    root.geometry(
+        newGeometry=f"{largura}x{altura}+{x_coordenada}+{y_coordenada}")
 
-        tela_largura: int = self.winfo_screenwidth()
-        tela_altura: int = self.winfo_screenheight()
-        # Coordenadas do canto superior esquerdo
-        x_coordenada = int((tela_largura/2) - (largura/2))
-        y_coordenada = int((tela_altura/2) - (altura/2))
-        self.geometry("{}x{}+{}+{}".format(largura,
-                                           altura, x_coordenada, y_coordenada))
+    # Frame lateral
+    menu_frame_cor = "#383838"
 
-        # Atribuindo valores padrões da janela
-        self.title(string="Login")
-        self.iconphoto(False, PhotoImage(file="logo.png"))
-        self.resizable(height=False, width=False)
+    global menu_frame
+    menu_frame = tk.Frame(root, background=menu_frame_cor)
+    menu_frame.pack(side=tk.LEFT, fill=tk.Y, padx=3, pady=3)
+    menu_frame.pack_propagate(flag=False)
+    menu_frame.configure(width=45)
 
-        # Configurando a grade
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_rowconfigure(3, weight=1)
-        self.grid_rowconfigure(4, weight=1)
+    # Frame principal
 
-        self.criar_widgets()
+    global main_frame
+    main_frame = tk.Frame(root)
+    main_frame.pack(side=tk.LEFT, fill="both", padx=3, pady=3)
+    main_frame.pack_propagate(flag=False)
+    main_frame.configure(width=1280)
 
-    def criar_widgets(self):
+    # Imagens
+    toggle_icone = tk.PhotoImage(file="images/menu.png")
+    agenda_icone = tk.PhotoImage(file="images/menu_agenda.png")
+    cadastro_icone = tk.PhotoImage(file="images/menu_cadastro.png")
 
-        fonte_label = "Consolas 11 bold"
-        fonte_entry = "Consolas 11"
+    # Botão Toggle
+    botao_toggle = tk.Button(menu_frame, image=toggle_icone, background=menu_frame_cor,
+                             border=0, activebackground=menu_frame_cor)
+    botao_toggle.place(x=4, y=10)
 
-        # Criação dos widgets
-        usuario_label = ttk.Label(
-            master=self, text="Usuário:", font=fonte_label)
-        senha_label = ttk.Label(master=self, text="Senha:", font=fonte_label)
-        usuario_entry = ttk.Entry(self, font=fonte_entry)
-        senha_entry = ttk.Entry(self, font=fonte_entry)
+    # Botão Agenda
+    botao_agenda = tk.Button(menu_frame, image=agenda_icone, background=menu_frame_cor,
+                             border=0, activebackground=menu_frame_cor,
+                             command=lambda: botoes_acao(ind=botao_agenda_ind, pagina=agenda))
+    botao_agenda.place(x=8, y=113, width=32, height=35)
+    botao_agenda_ind = tk.Label(menu_frame, background="white")
+    botao_agenda_ind.place(x=3, y=113, width=2, height=35)
 
-        # Posicionamento dos widgets
-        usuario_label.grid(column=1, row=1, padx=5, pady=5, sticky="E")
-        usuario_entry.grid(column=2, row=1, padx=5, pady=5, sticky="W")
-        senha_label.grid(column=1, row=2, padx=5, pady=5, sticky="E")
-        senha_entry.grid(column=2, row=2, padx=5, pady=5, sticky="W")
+    # Botão Cadastro
+    botao_cadastro = tk.Button(menu_frame, image=cadastro_icone, background=menu_frame_cor,
+                               border=0, activebackground=menu_frame_cor,
+                               command=lambda: botoes_acao(ind=botao_cadastro_ind, pagina=cadastro))
+    botao_cadastro.place(x=8, y=170, width=30, height=35)
+    botao_cadastro_ind = tk.Label(menu_frame, background=menu_frame_cor)
+    botao_cadastro_ind.place(x=3, y=170, width=2, height=35)
 
-        # Configurando espaçamento extra para centralizar os widgets
-        self.grid_rowconfigure(0, weight=4)
-        self.grid_rowconfigure(1, weight=0)
-        self.grid_rowconfigure(2, weight=0)
-        self.grid_rowconfigure(3, weight=4)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
-        self.grid_columnconfigure(3, weight=1)
-
-        # Foco na caixa de texto do usuário
-        usuario_entry.focus()
+    agenda()
+    root.mainloop()
 
 
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+def botoes_acao(ind, pagina):
+
+    # Inicializa indicadores dos botões
+    for widget in menu_frame.winfo_children():
+        if isinstance(widget, Label):
+            widget.config(background="#383838")
+
+    ind.config(background="white")
+
+    exclui_paginas()
+    pagina()
+
+
+def agenda():
+
+    frame_agenda = tk.Frame(main_frame)
+
+    lbl_texto = tk.Label(
+        frame_agenda, text="Página Agenda\n\n1", font="Arial 30 bold")
+    lbl_texto.pack()
+
+    frame_agenda.pack()
+
+
+def cadastro():
+
+    frame_cadastro = tk.Frame(main_frame)
+
+    lbl_texto = tk.Label(
+        frame_cadastro, text="Página Cadastro\n\n2", font="Arial 30 bold")
+    lbl_texto.pack()
+
+    frame_cadastro.pack()
+
+
+def exclui_paginas():
+
+    for frame in main_frame.winfo_children():
+        frame.destroy()
+
+
+if __name__ == '__main__':
+    cria_janela()
