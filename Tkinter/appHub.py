@@ -5,9 +5,7 @@
 import tkinter as tk
 from tkinter import Label
 
-
 class AppHub:
-
     def __init__(self):
 
         self.root = tk.Tk()
@@ -37,9 +35,7 @@ class AppHub:
         self.main_frame.configure(width=1280)
 
         self.criar_widgets_menu()
-
         self.agenda()
-
         self.root.mainloop()
 
     def criar_widgets_menu(self):
@@ -55,6 +51,7 @@ class AppHub:
         self.sair_png = tk.PhotoImage(file="images/menu_sair.png")
 
         # Botão Toggle
+
         botao_toggle = tk.Button(self.menu_frame, image=self.toggle_png, background=self.menu_frame_cor,
                                  border=0, activebackground=self.menu_frame_cor)
         botao_toggle.place(x=4, y=10)
