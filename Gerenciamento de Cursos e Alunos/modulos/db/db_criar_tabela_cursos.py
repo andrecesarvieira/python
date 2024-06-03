@@ -56,6 +56,3 @@ class Criar_Tabela_Cursos():
       print ("Erro ao tentar fechar o banco de dados", erro, self.msg)
     else:
       print ("Conexão com banco de dados encerrada")
-  
-if __name__ == '__main__':
-    s = Criar_Tabela_Cursos()

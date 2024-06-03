@@ -1,4 +1,4 @@
-# Módulo para criação da tabela CURSOS
+# Módulo para criação da tabela TURMAS
 # André Vieira
 # 2/6/24
 
@@ -56,6 +56,3 @@ class Criar_Tabela_Turmas():
       print ("Erro ao tentar fechar o banco de dados", erro, self.msg)
     else:
       print ("Conexão com banco de dados encerrada")
-  
-if __name__ == '__main__':
-    s = Criar_Tabela_Turmas()
