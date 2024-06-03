@@ -8,7 +8,7 @@ import sys
 import db.db_criar_tabela_alunos
 import db.db_criar_tabela_cursos
 import db.db_criar_tabela_turmas
-import db.db_crud
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import db
