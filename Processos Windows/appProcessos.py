@@ -36,7 +36,6 @@ def obter_configuracao(servico_nome):
         tipo_inicio = config_servico[1]
         return tipo_inicio
     except Exception as e:
-        # Apenas informativo
         print(f"Erro ao obter configuração do serviço {servico_nome}: {e}")
         return None
 
@@ -52,29 +51,31 @@ def obter_descricao(servico_nome):
         descricao = descricao_servico
         return descricao if descricao else "Descrição não disponível"
     except win32api.error as e:
-        if e.winerror == 15100:
+        if e.winerror == 15100 or e.winerror == 2:
             return "Descrição não disponível"
-        # Apenas informativo
         print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")
         return "Descrição não disponível"
     except Exception as e:
-        # Apenas informativo
         print(f"Erro ao obter descrição do serviço {servico_nome}: {e}")
         return "Descrição não disponível"
 
 
 def obter_status(servico_nome):
-    status_servico = win32serviceutil.QueryServiceStatus(servico_nome)[1]
-    status = {
-        win32service.SERVICE_STOPPED: "Parado",
-        win32service.SERVICE_START_PENDING: "Iniciando",
-        win32service.SERVICE_STOP_PENDING: "Parando",
-        win32service.SERVICE_RUNNING: "Executando",
-        win32service.SERVICE_CONTINUE_PENDING: "Continuando",
-        win32service.SERVICE_PAUSE_PENDING: "Pausando",
-        win32service.SERVICE_PAUSED: "Pausado"
-    }.get(status_servico, "Desconhecido")
-    return status
+    try:
+        status_servico = win32serviceutil.QueryServiceStatus(servico_nome)[1]
+        status = {
+            win32service.SERVICE_STOPPED: "Parado",
+            win32service.SERVICE_START_PENDING: "Iniciando",
+            win32service.SERVICE_STOP_PENDING: "Parando",
+            win32service.SERVICE_RUNNING: "Executando",
+            win32service.SERVICE_CONTINUE_PENDING: "Continuando",
+            win32service.SERVICE_PAUSE_PENDING: "Pausando",
+            win32service.SERVICE_PAUSED: "Pausado"
+        }.get(status_servico, "Desconhecido")
+        return status
+    except Exception as e:
+        print(f"Erro ao obter status do serviço {servico_nome}: {e}")
+        return "Desconhecido"
 
 
 def listar_servicos():
@@ -106,7 +107,8 @@ def listar_servicos():
             win32service.SERVICE_SYSTEM_START: "Sistema"
         }
 
-        tipo_inicio_str = tipos_inicio.get(tipo_inicio, "Desconhecido")
+        tipo_inicio_str = tipos_inicio.get(
+            tipo_inicio, "Desconhecido") if tipo_inicio is not None else "Desconhecido"
 
         tabela_servicos.append({
             "nome": nome_servico,
@@ -131,7 +133,6 @@ def desabilitar_servico(servico):
             print(
                 f"Erro ao desabilitar o serviço {nome_servico}: {resultado.stderr}")
     except Exception as e:
-        # Apenas informativo
         print(f"Erro ao desabilitar o serviço {nome_servico}: {str(e)}")
 
 
@@ -140,7 +141,6 @@ def iniciar_servico(servico):
     try:
         win32serviceutil.StartService(nome_servico)
     except Exception as e:
-        # Apenas informativo
         print(f"Erro ao iniciar o serviço {nome_servico}: {str(e)}")
 
 
@@ -149,7 +149,6 @@ def parar_servico(servico):
     try:
         win32serviceutil.StopService(nome_servico)
     except Exception as e:
-        # Apenas informativo
         print(f"Erro ao parar o serviço {nome_servico}: {str(e)}")
 
 
@@ -174,7 +173,7 @@ def atualizar_lista(tree, filtro=""):
 
 def criar_gui():
     root = tk.Tk()
-    root.title("Gerenciador de Serviços")
+    root.title("Gerenciador de Serviços com PESQUISAR")
     root.geometry("1200x600")
 
     search_frame = tk.Frame(root)
@@ -186,7 +185,6 @@ def criar_gui():
     search_entry = tk.Entry(search_frame)
     search_entry.pack(fill=tk.X, padx=5, expand=True)
 
-    # Adiciona o foco ao campo de entrada de pesquisa
     search_entry.focus_set()
 
     frame = tk.Frame(root)
@@ -197,7 +195,6 @@ def criar_gui():
     tree = ttk.Treeview(frame, columns=columns, show="headings")
     tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    # Definindo as larguras das colunas
     tree.column("Nome", width=150)
     tree.column("Nome de Exibição", width=200)
     tree.column("Descrição", width=400)
