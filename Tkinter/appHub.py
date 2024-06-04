@@ -1,7 +1,3 @@
-# Módulo para criação da estrutura de um AppHub
-# Autor: André Vieira
-# Data: 30/05/2024
-
 import tkinter as tk
 from tkinter import Label
 
@@ -30,9 +26,7 @@ class AppHub:
         self.menu_frame.configure(width=45)
 
         self.main_frame = tk.Frame(self.root)
-        self.main_frame.pack(side=tk.LEFT, fill="both", padx=3, pady=3)
-        self.main_frame.pack_propagate(False)
-        self.main_frame.configure(width=1280)
+        self.main_frame.pack(side=tk.LEFT, fill="both", padx=3, pady=3, expand=True)
 
         self.criar_widgets_menu()
         self.agenda()
@@ -51,7 +45,6 @@ class AppHub:
         self.sair_png = tk.PhotoImage(file="images/menu_sair.png")
 
         # Botão Toggle
-
         botao_toggle = tk.Button(self.menu_frame, image=self.toggle_png, background=self.menu_frame_cor,
                                  border=0, activebackground=self.menu_frame_cor)
         botao_toggle.place(x=4, y=10)
@@ -105,7 +98,7 @@ class AppHub:
         lbl_texto = tk.Label(frame_agenda, text="Página Agenda\n\n1", font="Arial 30 bold")
         lbl_texto.pack()
 
-        frame_agenda.pack()
+        frame_agenda.pack(fill="both", expand=True)
 
     def cadastro(self):
         frame_cadastro = tk.Frame(self.main_frame)
@@ -113,7 +106,7 @@ class AppHub:
         lbl_texto = tk.Label(frame_cadastro, text="Página Cadastro\n\n2", font="Arial 30 bold")
         lbl_texto.pack()
 
-        frame_cadastro.pack()
+        frame_cadastro.pack(fill="both", expand=True)
 
     def financeiro(self):
         frame_financeiro = tk.Frame(self.main_frame)
@@ -121,7 +114,7 @@ class AppHub:
         lbl_texto = tk.Label(frame_financeiro, text="Página Financeiro\n\n3", font="Arial 30 bold")
         lbl_texto.pack()
 
-        frame_financeiro.pack()
+        frame_financeiro.pack(fill="both", expand=True)
 
     def pedidos(self):
         frame_pedidos = tk.Frame(self.main_frame)
@@ -129,12 +122,11 @@ class AppHub:
         lbl_texto = tk.Label(frame_pedidos, text="Página Pedidos\n\n4", font="Arial 30 bold")
         lbl_texto.pack()
 
-        frame_pedidos.pack()
+        frame_pedidos.pack(fill="both", expand=True)
 
     def exclui_paginas(self):
         for frame in self.main_frame.winfo_children():
             frame.destroy()
-
 
 if __name__ == '__main__':
     app = AppHub()

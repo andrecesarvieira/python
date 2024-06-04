@@ -1,11 +1,6 @@
+import re
 import tkinter as tk
 from tkinter import scrolledtext, ttk
-
-import sys
-import os
-import re
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 
 class appCalcGUI:
     def __init__(self, root):
@@ -76,6 +71,7 @@ class appCalcGUI:
 
 
 class Calculo:
+    @staticmethod
     def calcularAreaTotal(area_cobol):
         total_area = 0
         campos = []
@@ -88,8 +84,7 @@ class Calculo:
             match_redefines = re.match(
                 r'\s*(\d+)\s+(\S+)\s+REDEFINES\s+(\S+)\.', linha)
             if match_redefines:
-                redefined_name = match_redefines.group(3)
-                redefined_fields.add(redefined_name)
+                redefined_fields.add(match_redefines.group(3))
                 in_redefines_block = True
                 redefines_indentation = len(re.match(r'(\s*)', linha).group(1))
                 continue
@@ -101,8 +96,16 @@ class Calculo:
                 else:
                     continue
 
-            match_field = re.match(
-                r'\s*(\d+)\s+(\S+)\s+PIC\s+([9X])(?:\((\d+)\))?(?:\s+(?:OCCURS|OC)\s+(\d+))?(?:\s+DEPENDING\s+ON\s+(\S+))?(?:\s+(BINARY|COMP(?:-2|-3|-4|-5)?))?', linha)
+            # Expressão regular dividida para melhor legibilidade
+            expressao = (
+                r'\s*(\d+)\s+(\S+)\s+PIC\s+([9X])'
+                r'(?:\((\d+)\))?'
+                r'(?:\s+(?:OCCURS|OC)\s+(\d+))?'
+                r'(?:\s+DEPENDING\s+ON\s+(\S+))?'
+                r'(?:\s+(BINARY|COMP(?:-2|-3|-4|-5)?))?'
+            )
+
+            match_field = re.match(expressao, linha)
             if match_field:
                 name = match_field.group(2)
                 field_type = match_field.group(3)
