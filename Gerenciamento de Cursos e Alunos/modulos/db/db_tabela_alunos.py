@@ -9,20 +9,6 @@ import sqlite3
 class CrudTabelaAlunos():
   local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
 
-  def ler_tudo(self, con) -> list: 
-    try:
-      with con:
-        tabela = []
-        cur = con.cursor()
-        cur.execute("SELECT * FROM ALUNOS")
-        res = cur.fetchall()
-        for i in res:
-          tabela.append(i)
-    except sqlite3.Error as erro:
-      print ("Erro ao ler a tabela ALUNOS: ", erro, self.local)
-    else:
-      return tabela
-
   def inserir(self, con, dados):
     try:
       with con:
@@ -32,7 +18,21 @@ class CrudTabelaAlunos():
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print ("Erro ao inserir na tabela ALUNOS: ", erro, self.local)
+      print (f"Erro ao inserir na tabela ALUNOS: {erro}, {self.local}")
+
+  def ler(self, con) -> list: 
+    try:
+      with con:
+        tabela = []
+        cur = con.cursor()
+        cur.execute("SELECT * FROM ALUNOS")
+        res = cur.fetchall()
+        for i in res:
+          tabela.append(i)
+    except sqlite3.Error as erro:
+      print (f"Erro ao ler a tabela ALUNOS: {erro}, {self.local}")
+    else:
+      return tabela
   
   def atualizar(self, con, dados):
     try:
@@ -44,16 +44,16 @@ class CrudTabelaAlunos():
                    WHERE id=?"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print ("Erro ao atualizar na tabela ALUNOS: ", erro, self.local)
+      print (f"Erro ao atualizar na tabela ALUNOS: {erro}, {self.local}")
 
   def deletar(self, con, id):
       try:
+        with con:          
           cur = con.cursor()
           query = "DELETE FROM ALUNOS WHERE id=?"
           cur.execute(query, (id,))
-          con.commit()
       except sqlite3.Error as erro:
-          print("Erro ao deletar na tabela ALUNOS:", erro, self.local)
+          print(f"Erro ao deletar na tabela ALUNOS: {erro}, {self.local}")
 
 class CriarTabelaAlunos():
   local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
@@ -76,4 +76,4 @@ class CriarTabelaAlunos():
                     ON DELETE CASCADE)""")
         print("Tabela ALUNOS criada.")
     except sqlite3.Error as erro:
-      print ("Erro ao criar tabela ALUNOS: ", erro, self.local)
+      print (f"Erro ao criar tabela ALUNOS: {erro}, {self.local}")

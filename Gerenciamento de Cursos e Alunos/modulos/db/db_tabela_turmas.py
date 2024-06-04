@@ -13,7 +13,7 @@ class CrudTabelaTurmas():
 
 class CriarTabelaTurmas():
   
-  local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"  
+  local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"  
 
   def criar(self, con):
 
