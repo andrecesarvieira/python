@@ -5,13 +5,15 @@
 
 import os
 import sys
-import db.db_tabela_alunos
-import db.db_tabela_cursos
-import db.db_tabela_turmas
+from db.db_tabela_alunos import Criar_Tabela_Alunos
+from db.db_tabela_cursos import Criar_Tabela_Cursos
+from db.db_tabela_turmas import Criar_Tabela_Turmas
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 if __name__ == '__main__':
-  db.db_tabela_alunos.Criar_Tabela_Alunos()
-  db.db_tabela_cursos.Criar_Tabela_Cursos()
-  db.db_tabela_turmas.Criar_Tabela_Turmas()
+  # Tabela Alunos
+  alunos = Conectar_Banco_de_Dados()
+
+  #db.db_tabela_cursos.Criar_Tabela_Cursos()
+  #db.db_tabela_turmas.Criar_Tabela_Turmas()

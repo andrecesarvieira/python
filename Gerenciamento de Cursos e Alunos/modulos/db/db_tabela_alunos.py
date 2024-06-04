@@ -8,32 +8,50 @@ import sys
 import sqlite3
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from msg.msg_mensagens import Mensagem_Erro
+class Crud_Tabela_Alunos():
+
+  local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
+
+  def ler_tudo(self) -> list: 
+
+    try:
+      with self.con:
+        tabela = []
+        cur = self.con.cursor()
+        cur.execute = "SELECT * FROM ALUNOS"
+        res = cur.fetchall
+        for i in res:
+          tabela.append(i)
+    except sqlite3.Error as erro:
+      print ("Erro ao ler a tabela ALUNOS: ", erro, self.local)
+    else:
+      return tabela
+
+  def inserir(self,dados):
+ 
+    try:
+      with self.con:
+        cur = self.con.cursor()
+        query = "INSERT INTO ALUNOS (nome, duracao, preco) VALUES (?, ?, ?)"
+        cur.execute(query, dados)
+    except sqlite3.Error as erro:
+      print ("Erro ao inserir na tabela ALUNOS: ", erro, self.local)
+  
+  def atualizar(self,dados):
+ 
+    try:
+      with self.con:
+        cur = self.con.cursor()
+        query = "UPDATE ALUNOS SET nome=?, duracao=?, preco=? WHERE id=?"
+        cur.execute(query, dados)
+    except sqlite3.Error as erro:
+      print ("Erro ao atualizar na tabela ALUNOS: ", erro, self.local)
 
 class Criar_Tabela_Alunos():
 
-  def __init__(self):      
-
-    self.msg = Mensagem_Erro()
-    self.msg.Origem_Msg(self.__class__.__name__, os.path.basename(__file__))
-
-    self.db_arquivo = "db/banco_de_dados.db"
-    self.con = None
-    
-    self.conectar()
-    self.criar_tabela()
-    self.encerrar()
-
-  def conectar(self):
-    
-    try:
-      self.con = sqlite3.connect(self.db_arquivo)
-    except sqlite3 as erro:
-      print("Erro de conexão com banco de dados: ", erro, self.msg) 
-    else:
-      print("Conexão com banco de dados realizada")
-
-  def criar_tabela(self):
+  local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
+  
+  def criar(self):
 
     try:
       with self.con:
@@ -52,52 +70,4 @@ class Criar_Tabela_Alunos():
                     ON DELETE CASCADE)""")
         print("Tabela ALUNOS criada")
     except sqlite3.Error as erro:
-      print ("Erro ao criar tabela ALUNOS: ", erro, self.msg)
-
-  def encerrar(self):
-    
-    try:
-      self.con.close()
-    except sqlite3.Error as erro:
-      print ("Erro ao tentar fechar o banco de dados", erro, self.msg)
-    else:
-      print ("Conexão com banco de dados encerrada")
-
-class Crud_Tabela_Alunos():
-    
-  def __init__(self):
-    
-    self.msg = Mensagem_Erro()
-    self.msg.Origem_Msg(self.__class__.__name__, os.path.basename(__file__))
-        
-    try:
-      self.con = sqlite3.connect("db/banco_de_dados.db")
-      print("Conexão com banco de dados OK")
-    except sqlite3 as erro:
-      print("Erro de conexão com banco de dados: ", erro, self.msg)  
-
-  def ler_tudo(self) -> list: 
-
-    try:
-      with self.con:
-        tabela = []
-        cur = self.con.cursor()
-        cur.execute = "SELECT * FROM " + tabela
-        res = cur.fetchall
-        for i in res:
-          tabela.append(i)
-    except sqlite3.Error as erro:
-      print ("Erro ao ler a tabela ALUNOS: ", erro, self.msg)
-    else:
-      return tabela
-
-  def inserir(self,dados):
- 
-    try:
-      with self.con:
-        cur = self.con.cursor()
-        query = "INSERT INTO ALUNOS (nome, duracao, preco) \
-                 VALUES (?, ?, ?)"
-        cur.execute(query, dados)
-    except sqlite3.Error as erro:
-      print ("Erro ao inserir na tabela: ", erro, self.msg)
+      print ("Erro ao criar tabela ALUNOS: ", erro, self.local)
