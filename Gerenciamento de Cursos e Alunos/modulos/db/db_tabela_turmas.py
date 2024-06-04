@@ -8,10 +8,10 @@ import sys
 import sqlite3
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-class Crud_Tabela_Turmas():
+class CrudTabelaTurmas():
   pass
 
-class Criar_Tabela_Turmas():
+class CriarTabelaTurmas():
   
   local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"  
 
