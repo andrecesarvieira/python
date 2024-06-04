@@ -17,10 +17,22 @@ class appCalcGUI:
         self.criarArvoreCampos()
 
     def criarAreaTexto(self):
-        self.area_texto = scrolledtext.ScrolledText(
-            self.root, width=80, height=15, wrap=tk.WORD)
-        self.area_texto.grid(row=0, column=0, columnspan=2,
-                             padx=10, pady=10, sticky="nsew")
+        
+        frame = ttk.Frame(self.root)
+        frame.grid(row=0, column=0, columnspan=2,
+                               padx=10, pady=5, sticky="nsew")
+
+        self.area_texto = tk.Text(frame, bd=1, relief='groove', wrap="none")
+
+        vsb = ttk.Scrollbar(frame, command=self.area_texto.yview, orient="vertical")
+        vsb.grid(row=0, column=1, sticky="ns")
+
+        self.area_texto.configure(yscrollcommand=vsb.set, xscrollcommand=False)
+
+        frame.grid_rowconfigure(0, weight=1)
+        frame.grid_columnconfigure(0, weight=1)
+       
+        self.area_texto.grid(row=0, column=0, sticky="nsew")
 
     def criarBotoes(self):
         frame_botoes = ttk.Frame(self.root)
