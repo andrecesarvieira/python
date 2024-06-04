@@ -32,4 +32,4 @@ class Criar_Tabela_Turmas():
     except sqlite3.Error as erro:
       print ("Erro ao criar tabela TURMAS: ", erro, self.local)
     else:
-      print("Tabela TURMAS criada")
+      print("Tabela TURMAS criada.")
