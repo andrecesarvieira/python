@@ -6,8 +6,8 @@ import sv_ttk
 class appCalcGUI:
     def __init__(self, root):
         self.root = root
-        root.title("Calculadora de Área COBOL")
-        root.resizable(False, False)
+        self.root.title("Calculadora de Área COBOL")
+        self.root.resizable(False, False)
         self.criarWidgets()
 
     def criarWidgets(self):
@@ -17,32 +17,32 @@ class appCalcGUI:
         self.criarArvoreCampos()
 
     def criarAreaTexto(self):
-        frame = ttk.Frame(self.root)
-        frame.grid(row=0, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+        self.frame = ttk.Frame(self.root)
+        self.frame.grid(row=0, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
 
-        self.area_texto = tk.Text(frame, bd=1, relief='groove', wrap="none")
+        self.area_texto = tk.Text(self.frame, bd=1, relief='groove', wrap="none")
 
-        vsb = ttk.Scrollbar(frame, command=self.area_texto.yview, orient="vertical")
+        vsb = ttk.Scrollbar(self.frame, command=self.area_texto.yview, orient="vertical")
         vsb.grid(row=0, column=1, sticky="ns")
 
         self.area_texto.configure(yscrollcommand=vsb.set, xscrollcommand=False)
 
-        frame.grid_rowconfigure(0, weight=1)
-        frame.grid_columnconfigure(0, weight=1)
+        self.frame.grid_rowconfigure(0, weight=1)
+        self.frame.grid_columnconfigure(0, weight=1)
        
         self.area_texto.grid(row=0, column=0, sticky="nsew")
 
     def criarBotoes(self):
-        frame_botoes = ttk.Frame(self.root)
-        frame_botoes.grid(row=1, column=0, columnspan=2, pady=5)
+        self.frame_botoes = ttk.Frame(self.root)
+        self.frame_botoes.grid(row=1, column=0, columnspan=2, pady=5)
         self.botao_calcular = ttk.Button(
-            frame_botoes, text="Calcular Área", command=self.calcularArea)
+            self.frame_botoes, text="Calcular Área", command=self.calcularArea)
         self.botao_calcular.grid(row=0, column=0, padx=5)
         self.botao_limpar = ttk.Button(
-            frame_botoes, text="Limpar", command=self.limparAreaTexto)
+            self.frame_botoes, text="Limpar", command=self.limparAreaTexto)
         self.botao_limpar.grid(row=0, column=1, padx=5)
         self.botao_tema = ttk.Button(
-            frame_botoes, text="Tema", command=self.mudarTema)
+            self.frame_botoes, text="Tema", command=self.mudarTema)
         self.botao_tema.grid(row=0, column=2, padx=5)
 
     def criarLabelResultado(self):
