@@ -1,6 +1,7 @@
-# Módulo para chamar a criação de todas as tabelas do banco de dados
-# André Vieira
-# 3/6/24
+# Objetivo: Criação das tabelas do banco de dados
+#           CRUD da tabela TURMAS
+# Autor...: André Vieira
+# Data....: 3/6/24
 
 import os
 import sys
