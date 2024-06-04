@@ -11,7 +11,7 @@ class Conectar_Banco_de_Dados():
   
   local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
   
-  def conectar(self):      
+  def conectar(self) -> str:
     
     self.db_arquivo = "db/banco_de_dados.db"
     self.con = None
@@ -22,8 +22,11 @@ class Conectar_Banco_de_Dados():
       print("Erro de conexão com banco de dados: ", erro, self.local) 
     else:
       print("Conexão com banco de dados realizada")
+      return self.con
 
-  def encerrar(self):
+  def encerrar(self, con):
+    
+    self.con = con
     
     try:
       self.con.close()

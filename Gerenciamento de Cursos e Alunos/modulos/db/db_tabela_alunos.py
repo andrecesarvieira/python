@@ -12,8 +12,10 @@ class Crud_Tabela_Alunos():
 
   local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
 
-  def ler_tudo(self) -> list: 
-
+  def ler_tudo(self, con) -> list: 
+    
+    self.con = con
+    
     try:
       with self.con:
         tabela = []
@@ -27,8 +29,10 @@ class Crud_Tabela_Alunos():
     else:
       return tabela
 
-  def inserir(self,dados):
- 
+  def inserir(self, con, dados):
+
+    self.con = con
+
     try:
       with self.con:
         cur = self.con.cursor()
@@ -37,8 +41,10 @@ class Crud_Tabela_Alunos():
     except sqlite3.Error as erro:
       print ("Erro ao inserir na tabela ALUNOS: ", erro, self.local)
   
-  def atualizar(self,dados):
- 
+  def atualizar(self, con, dados):
+    
+    self.con = con
+    
     try:
       with self.con:
         cur = self.con.cursor()
@@ -51,7 +57,9 @@ class Criar_Tabela_Alunos():
 
   local = "(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
   
-  def criar(self):
+  def criar(self, con):
+    
+    self.con = con
 
     try:
       with self.con:
