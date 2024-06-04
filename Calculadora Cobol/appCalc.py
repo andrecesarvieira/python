@@ -1,6 +1,7 @@
 import re
 import tkinter as tk
 from tkinter import scrolledtext, ttk
+import sv_ttk
 
 class appCalcGUI:
     def __init__(self, root):
@@ -22,18 +23,21 @@ class appCalcGUI:
                              padx=10, pady=10, sticky="nsew")
 
     def criarBotoes(self):
-        frame_botoes = tk.Frame(self.root)
+        frame_botoes = ttk.Frame(self.root)
         frame_botoes.grid(row=1, column=0, columnspan=2, pady=5)
-        self.botao_calcular = tk.Button(
+        self.botao_calcular = ttk.Button(
             frame_botoes, text="Calcular Área", command=self.calcularArea)
         self.botao_calcular.grid(row=0, column=0, padx=5)
-        self.botao_limpar = tk.Button(
+        self.botao_limpar = ttk.Button(
             frame_botoes, text="Limpar", command=self.limparAreaTexto)
         self.botao_limpar.grid(row=0, column=1, padx=5)
+        self.botao_tema = ttk.Button(
+            frame_botoes, text="Tema", command=self.mudarTema)
+        self.botao_tema.grid(row=0, column=2, padx=5)
 
     def criarLabelResultado(self):
-        self.label_resultado = tk.Label(
-            self.root, text="", font=("Helvetica", 12))
+        self.label_resultado = ttk.Label(
+            self.root, text="", font=("Helvetica", 10, "bold"))
         self.label_resultado.grid(row=2, column=0, columnspan=2, pady=5)
 
     def criarArvoreCampos(self):
@@ -69,6 +73,11 @@ class appCalcGUI:
         for campo in campos:
             self.arvore.insert('', 'end', values=campo)
 
+    def mudarTema(self):
+        if sv_ttk.get_theme() == "dark":
+            sv_ttk.use_light_theme()
+        else:
+            sv_ttk.use_dark_theme()
 
 class Calculo:
     @staticmethod
@@ -76,66 +85,67 @@ class Calculo:
         total_area = 0
         campos = []
         linhas = area_cobol.split('\n')
-        redefined_fields = set()
-        in_redefines_block = False
-        redefines_indentation = 0
+        redefinidos = set()
+        redefinindo = False
+        nivel_redefine = 0
+        fatores_ocorrencia = [1] * 50  # Lista inicializada para 50 níveis de hierarquia
 
         for linha in linhas:
-            match_redefines = re.match(
+            match_redefine = re.match(
                 r'\s*(\d+)\s+(\S+)\s+REDEFINES\s+(\S+)\.', linha)
-            if match_redefines:
-                redefined_fields.add(match_redefines.group(3))
-                in_redefines_block = True
-                redefines_indentation = len(re.match(r'(\s*)', linha).group(1))
+            if match_redefine:
+                redefinidos.add(match_redefine.group(3))
+                redefinindo = True
+                nivel_redefine = int(match_redefine.group(1))
                 continue
 
-            if in_redefines_block:
-                line_indentation = len(re.match(r'(\s*)', linha).group(1))
-                if line_indentation <= redefines_indentation:
-                    in_redefines_block = False
+            if redefinindo:
+                nivel_linha = int(re.match(r'(\s*)', linha).group(1))
+                if nivel_linha <= nivel_redefine:
+                    redefinindo = False
                 else:
                     continue
 
-            # Expressão regular dividida para melhor legibilidade
             expressao = (
-                r'\s*(\d+)\s+(\S+)\s+PIC\s+([9X])'
+                r'\s*(\d+)\s+(\S+)\s+PIC\s+([9XZS])'
                 r'(?:\((\d+)\))?'
-                r'(?:\s+(?:OCCURS|OC)\s+(\d+))?'
-                r'(?:\s+DEPENDING\s+ON\s+(\S+))?'
-                r'(?:\s+(BINARY|COMP(?:-2|-3|-4|-5)?))?'
+                r'(?:V9\((\d+)\))?'  # Captura campos com ponto decimal
+                r'(?:\s+OCCURS\s+(\d+))?' # Captura ocorrências
+                r'(?:\s+OC\s+(\d+))?' # Captura ocorrências abrev.
+                r'(?:\s+(BINARY|COMP(?:-1|-2|-3|-4|-5)?))?'
             )
+            
+            match_campo = re.match(expressao, linha)
+            if match_campo:
+                nivel = int(match_campo.group(1))
+                nome = match_campo.group(2)
+                tipo = match_campo.group(3)
+                tamanho = int(match_campo.group(4)) if match_campo.group(4) else 1
+                decimal_size = int(match_campo.group(5)) if match_campo.group(5) else 0
+                ocorrencias = int(match_campo.group(6)) if match_campo.group(6) else 1
 
-            match_field = re.match(expressao, linha)
-            if match_field:
-                name = match_field.group(2)
-                field_type = match_field.group(3)
-                size = int(match_field.group(4)) if match_field.group(4) else 1
-                occurs = int(match_field.group(
-                    5)) if match_field.group(5) else 1
+                if tipo in ['9', 'S']:
+                    tamanho += decimal_size
 
-                if match_field.group(7):
-                    comp_type = match_field.group(7)
-                    if comp_type == 'COMP':
-                        size = (size + 1) // 2
-                    elif comp_type == 'COMP-2':
-                        size = size // 2
-                    elif comp_type in ['COMP-3', 'COMP-4', 'COMP-5']:
-                        size = (size // 2) + 1
+                fatores_ocorrencia[nivel] = ocorrencias
 
-                if name in redefined_fields:
+                if nome in redefinidos:
                     continue
 
-                total_area += size * occurs
-                campos.append((name, field_type, size, occurs))
+                multiplicador = 1
+                for i in range(1, nivel + 1):
+                    multiplicador *= fatores_ocorrencia[i]
+
+                total_area += tamanho * multiplicador
+                campos.append((nome, tipo, tamanho, multiplicador))
 
         return total_area, campos
-
 
 def main():
     root = tk.Tk()
     appCalcGUI(root)
+    sv_ttk.use_light_theme()
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
