@@ -16,21 +16,23 @@ class appGerenciaGUI:
     x_coordenada = int((tela_largura / 2) - (largura / 2))
     y_coordenada = int((tela_altura / 2) - (altura / 2))
     self.root.geometry(f"{largura}x{altura}+{x_coordenada}+{y_coordenada}")
-    
-    frame_logo = ttk.Frame(self.rootroot, height=52)
-    frame_logo.grid(row==0, column=0)
 
-
+    sv_ttk.toggle_theme()
     #Experimental
-    style = ttk.Style(self.root)
-    style.theme_use("xpnative")
+    self.style = sv_ttk.Style(self.root)
+    self.style.configure("My.TFrame", background='#0059b3')
+
+    frame_logo = sv_ttk.Frame(self.root, width=850, height=52, style="My.TFrame")
+    frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky="nsew")
+
+
     
 
 
 def main():
   root = tk.Tk()
   appGerenciaGUI(root)
-  sv_ttk.use_dark_theme()
+  sv_ttk.use_light_theme()
   root.mainloop()
 
 if __name__ == "__main__":

@@ -84,10 +84,7 @@ class appCalcGUI:
             print(campo)
 
     def mudarTema(self):
-        if sv_ttk.get_theme() == "dark":
-            sv_ttk.use_light_theme()
-        else:
-            sv_ttk.use_dark_theme()
+        sv_ttk.toggle_theme()
 
 class Calculo:
     @staticmethod
