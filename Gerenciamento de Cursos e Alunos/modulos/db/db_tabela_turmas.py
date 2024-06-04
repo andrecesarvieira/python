@@ -29,6 +29,7 @@ class Criar_Tabela_Turmas():
                     data_inicio DATE,
                     FOREIGN KEY (curso) REFERENCES CURSOS (nome)
                     ON UPDATE CASCADE ON DELETE CASCADE)""")
-        print("Tabela TURMAS criada OK")
     except sqlite3.Error as erro:
       print ("Erro ao criar tabela TURMAS: ", erro, self.local)
+    else:
+      print("Tabela TURMAS criada")

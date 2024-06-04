@@ -31,4 +31,4 @@ class Criar_Tabela_Cursos():
     except sqlite3.Error as erro:
       print ("Erro ao criar tabela CURSOS: ", erro, self.local)
     else:
-      print("Tabela CURSOS criada OK")
+      print("Tabela CURSOS criada")
