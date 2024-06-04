@@ -8,7 +8,7 @@
 #                localhost/livros/id (DELETE)
 # Recursos.....: Livros
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 
 app = Flask(__name__)
 
@@ -21,50 +21,44 @@ livros = [
 ]
 
 # Consultar (todos)
-
-
 @app.route('/livros', methods=['GET'])
 def obter_livros():
-    return jsonify(livros)
+    return jsonify(livros), 200
 
 # Consultar (por id)
-
-
 @app.route('/livros/<int:id>', methods=['GET'])
 def obter_livro_id(id):
-    for livro in livros:
-        if livro.get('id') == id:
-            return jsonify(livro)
+    livro = next((livro for livro in livros if livro['id'] == id), None)
+    if livro is None:
+        abort(404)
+    return jsonify(livro), 200
 
 # Editar (por id)
-
-
 @app.route('/livros/<int:id>', methods=['PUT'])
 def editar_livro_id(id):
     alteracao = request.get_json()
-    for i, livro in enumerate(livros):
-        if livro.get('id') == id:
-            livros[i].update(alteracao)
-            return jsonify(livros[i])
+    livro = next((livro for livro in livros if livro['id'] == id), None)
+    if livro is None:
+        abort(404)
+    livro.update(alteracao)
+    return jsonify(livro), 200
 
 # Criar
-
-
 @app.route('/livros', methods=['POST'])
 def criar_livro():
     novo = request.get_json()
+    novo['id'] = max(livro['id'] for livro in livros) + 1
     livros.append(novo)
-    return jsonify(livros)
+    return jsonify(novo), 201
 
 # Excluir (por id)
-
-
 @app.route('/livros/<int:id>', methods=['DELETE'])
 def excluir_livro_id(id):
-    for i, livro in enumerate(livros):
-        if livro.get('id') == id:
-            del livros[i]
-            return jsonify(livros)
+    livro = next((livro for livro in livros if livro['id'] == id), None)
+    if livro is None:
+        abort(404)
+    livros.remove(livro)
+    return jsonify({}), 204
 
-
-app.run(port=5000, host='localhost', debug=True)
+if __name__ == '__main__':
+    app.run(port=5000, host='localhost', debug=True)

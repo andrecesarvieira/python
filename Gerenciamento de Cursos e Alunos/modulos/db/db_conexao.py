@@ -9,12 +9,12 @@ class ConectarBancodeDados():
   local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
 
   def __init__(self):
-    self.db_arquivo = os.path.join("db", "banco_de_dados.db")
+    self.arquivo = os.path.join("db", "banco_de_dados.db")
     self.con = None
   
   def conectar(self) -> str:
     try:
-      self.con = sqlite3.connect(self.db_arquivo)
+      self.con = sqlite3.connect(self.arquivo)
     except sqlite3 as erro:
       print("Erro de conexão com banco de dados: ", erro, self.local)
     else:
