@@ -1,6 +1,7 @@
-# Módulo para criação da tabela CURSOS
-# André Vieira
-# 2/6/24
+# Objetivo: Criação da tabela CURSOS
+#           CRUD da tabela CURSOS
+# Autor...: André Vieira
+# Data....: 2/6/24
 
 import os
 import sys

@@ -1,6 +1,8 @@
-# Módulo para criação da tabela TURMAS
-# André Vieira
-# 2/6/24
+# Objetivo: Criação da tabela TURMAS
+#           CRUD da tabela TURMAS
+# Autor...: André Vieira
+# Data....: 2/6/24
+
 
 import os
 import sys

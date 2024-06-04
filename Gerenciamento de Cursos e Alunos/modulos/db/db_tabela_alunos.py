@@ -1,6 +1,7 @@
-# Módulo para criação da tabela ALUNOS
-# André Vieira
-# 2/6/24
+# Objetivo: Criação da tabela ALUNOS
+#           CRUD da tabela ALUNOS
+# Autor...: André Vieira
+# Data....: 2/6/24
 
 import os
 import sys
@@ -61,3 +62,42 @@ class Criar_Tabela_Alunos():
       print ("Erro ao tentar fechar o banco de dados", erro, self.msg)
     else:
       print ("Conexão com banco de dados encerrada")
+
+class Crud_Tabela_Alunos():
+    
+  def __init__(self):
+    
+    self.msg = Mensagem_Erro()
+    self.msg.Origem_Msg(self.__class__.__name__, os.path.basename(__file__))
+        
+    try:
+      self.con = sqlite3.connect("db/banco_de_dados.db")
+      print("Conexão com banco de dados OK")
+    except sqlite3 as erro:
+      print("Erro de conexão com banco de dados: ", erro, self.msg)  
+
+  def ler_tudo(self) -> list: 
+
+    try:
+      with self.con:
+        tabela = []
+        cur = self.con.cursor()
+        cur.execute = "SELECT * FROM " + tabela
+        res = cur.fetchall
+        for i in res:
+          tabela.append(i)
+    except sqlite3.Error as erro:
+      print ("Erro ao ler a tabela ALUNOS: ", erro, self.msg)
+    else:
+      return tabela
+
+  def inserir(self,dados):
+ 
+    try:
+      with self.con:
+        cur = self.con.cursor()
+        query = "INSERT INTO ALUNOS (nome, duracao, preco) \
+                 VALUES (?, ?, ?)"
+        cur.execute(query, dados)
+    except sqlite3.Error as erro:
+      print ("Erro ao inserir na tabela: ", erro, self.msg)
