@@ -73,14 +73,14 @@ class JanelaPrincipal():
         lbl_logo_txt.place(x=400, y=6)
 
         # Criação das abas (bootstrap) no frame_abas
-        #Abas = ttk.Notebook(self.frame_meio)
-        #aba_alunos = ttk.Frame(Abas)
-        #aba_cursos = ttk.Frame(Abas)
-        #aba_turmas = ttk.Frame(Abas)
-        #Abas.add(aba_alunos, text='Alunos')
-        #Abas.add(aba_cursos, text='Cursos')
-        #Abas.add(aba_turmas, text='Turmas')
-        #Abas.pack(expand=1, fill='both')
+        abas = ttk.Notebook(self.frame_meio)
+        aba_alunos = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
+        aba_cursos = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
+        aba_turmas = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
+        abas.add(aba_alunos, text='Alunos')
+        abas.add(aba_cursos, text='Cursos')
+        abas.add(aba_turmas, text='Turmas')
+        abas.pack(expand=1, fill='both')
 
         # Criar label de mensagem para o usuário no frame_msg
         o = Image.open(fp='imagens/notificacao.png')
@@ -93,10 +93,10 @@ class JanelaPrincipal():
 
         hora = datetime.now()
         lbl_msg_txt = ttk.Label(self.frame_rodape, text=hora.strftime('%H:%M:%S') + ' - Sistema funcionando corretamente',
-                                anchor='w', font=self.FAM_FONTE_PADRAO)
+                                anchor='nw', font=self.FAM_FONTE_PADRAO)
         lbl_msg_txt.place(x=20, y=0)
 
         # Criação dos widgets alunos nas abas
-        # alunos = AbaAlunos(aba_alunos, self.style)
+        alunos = AbaAlunos(aba_alunos, self.style)
         # cursos = CriarFramesAlunos(aba_cursos) -> à implementar
         # turmas = CriarFramesAlunos(aba_turmas) -> à implementar

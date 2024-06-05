@@ -24,15 +24,17 @@ class AbaAlunos():
         self.style.configure('Frame3.TFrame', background='green')
 
         # Criar frames na guia alunos
-        self.frame_menu = ttk.Frame(self.guia_alunos, width=1272, height=40, style='Frame1.TFrame',
-                                    relief="raised", border=0, borderwidth=0)
-        self.frame_menu.grid(row=1, column=0, padx=0, pady=0, sticky='nsew')
-        self.frame_corpo = ttk.Frame(
-            self.guia_alunos, width=1272, height=280, style='Frame2.TFrame')
-        self.frame_corpo.grid(row=2, column=0, padx=0, pady=0, sticky='nsew')
-        self.frame_grade = ttk.Frame(self.guia_alunos, width=1272, height=280, style='Frame3.TFrame',
-                                     relief='raised', border=0, borderwidth=0)
-        self.frame_grade.grid(row=3, column=0, padx=0, pady=0, sticky='nsew')
+        self.frame_menu = ttk.Frame(self.guia_alunos, width=1272, height=40, relief="flat",
+                                    border=0, borderwidth=0, style='Frame1.TFrame')
+        self.frame_menu.pack(fill="both")
+        
+        self.frame_corpo = ttk.Frame(self.guia_alunos, width=1272, height=290, relief="flat",
+                                     style='Frame2.TFrame')
+        self.frame_corpo.pack(fill="both")
+        
+        self.frame_grade = ttk.Frame(self.guia_alunos, width=1272, height=285, relief="flat",
+                                     border=0, borderwidth=0, style='Frame3.TFrame')
+        self.frame_grade.pack(fill="both")
 
     def criar_widgets(self):
         pass
