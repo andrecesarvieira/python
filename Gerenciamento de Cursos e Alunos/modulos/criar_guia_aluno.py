@@ -1,3 +1,7 @@
+# Objetivo: Criação das guia alunos
+# Autor...: André Vieira
+# Data....: 5/6/24 -> desenvolvimento
+
 from tkinter import ttk
 
 class GuiaAlunos():

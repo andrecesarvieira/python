@@ -11,7 +11,7 @@ from db.db_tabela_turmas import CriarTabelaTurmas
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-if __name__ == '__main__':
+def main():
   c = ConectarBancodeDados()
   conexao = c.conectar()
   
@@ -25,3 +25,6 @@ if __name__ == '__main__':
     c.encerrar(conexao)
   else:
     print("Não foi possível criar as tabelas do banco de dados.")
+
+if __name__ == "__main__":
+  main()
