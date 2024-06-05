@@ -12,7 +12,7 @@ from modulos.db.tabela_turmas import CriarTabelaTurmas
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class CriarTabelasDB():
-  def conectar():
+  def __init__(self):
     c = ConectarBancodeDados()
     conexao = c.conectar()
     
