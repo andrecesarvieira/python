@@ -37,9 +37,9 @@ class appGerenciarGUI:
     # Definir ttk styles e criar frames logo e menu
     style = ttk.Style(self.root)
     frame_logo = ttk.Frame(self.root, width=1276, height=72, relief="raised")
-    frame_logo.grid(row=0, column=0, columnspan=2, pady=2, padx=2, sticky="nsew")
+    frame_logo.grid(row=0, column=0, columnspan=2, pady=2, padx=1, sticky="nsew")
     frame_menu = ttk.Frame(self.root, width=1276, height=60)
-    frame_menu.grid(row=1, column=0, columnspan=2, pady=0, padx=2, sticky="nsew")
+    frame_menu.grid(row=1, column=0, columnspan=2, pady=0, padx=1, sticky="nsew")
 
     # Definir cores e fonte
     COR_FONTE = "#0E2B4A"
@@ -68,7 +68,7 @@ class appGerenciarGUI:
                                         "font": ('JetBrains Mono Bold', 11),
                                         "borderwidth": (2)},
         "map":           {"foreground": [("selected", COR_FONTE)],
-        "expand":        [("selected", [1, 1, 1, 0])] } } } )
+        "expand":        [("selected", [0, 0, 0, 0])] } } } )
     
     style.theme_use("padrao")
 
@@ -83,7 +83,7 @@ class appGerenciarGUI:
     Guias.pack(expand = 1, fill ="both") 
 
     # Criação dos widgets alunos
-    alunos = GuiaAlunos(guia_alunos)
+    alunos = GuiaAlunos(guia_alunos, style)
     #cursos = CriarFramesAlunos(guia_cursos) -> à implementar
     #turmas = CriarFramesAlunos(guia_turmas) -> à implementar
 
