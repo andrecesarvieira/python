@@ -1,11 +1,12 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Depurador do Python: Módulo",
       "type": "debugpy",
       "request": "launch",
-      "module": "appGerenciarGUI"
+      "module": "main"
     }
   ]
 }

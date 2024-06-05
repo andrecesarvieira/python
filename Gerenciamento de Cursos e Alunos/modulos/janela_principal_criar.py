@@ -3,14 +3,17 @@
 # Data....: 4/6/24 -> desenvolvimento
 
 import tkinter as tk
-import sv_ttk
+#import sv_ttk -> à implementar
+
 from tkinter import ttk
 from tkinter import font
 from PIL import Image, ImageTk
 
-from modulos.criar_guia_aluno import GuiaAlunos
+from modulos.guia_aluno_criar import GuiaAlunos
+#from modulos.guia_cursos_criar import GuiaCursos -> à implementar
+#from modulos.guia_turmas_criar import GuiaTurmas -> à implementar
 
-class appGerenciarGUI:
+class JanelaPrincipal():
   def __init__(self, root):
     self.root = root
     self.root.title("Gerenciamento de Cursos e Alunos")
@@ -26,14 +29,14 @@ class appGerenciarGUI:
     y_coordenada = int((tela_altura / 2) - (ALTURA / 2))
     self.root.geometry(f"{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}")
 
-    # Definir tema  -> à implementar
+    # Definir tema -> à implementar
     #sv_ttk.set_theme("light")
     #root.tk.call('source', 'temas/forest-light.tcl')
     #ttk.Style().theme_use('forest-light')
 
-    self.criarJanelaPrincipal()
+    self.criar()
 
-  def criarJanelaPrincipal(self):  
+  def criar(self):  
     # Definir ttk styles e criar frames logo e menu
     style = ttk.Style(self.root)
     frame_logo = ttk.Frame(self.root, width=1276, height=72, relief="raised")
@@ -86,11 +89,3 @@ class appGerenciarGUI:
     alunos = GuiaAlunos(guia_alunos, style)
     #cursos = CriarFramesAlunos(guia_cursos) -> à implementar
     #turmas = CriarFramesAlunos(guia_turmas) -> à implementar
-
-def main():
-  root = tk.Tk()
-  appGerenciarGUI(root)
-  root.mainloop()
-
-if __name__ == "__main__":
-  main()
