@@ -25,4 +25,4 @@ class CriarTabelasDB():
       turmas.criar(conexao)
       c.encerrar(conexao)
     else:
-      print("Não foi possível criar as tabelas do banco de dados.")
+      print('Não foi possível criar as tabelas do banco de dados.')

@@ -6,7 +6,7 @@ import tkinter as tk
 
 from tkinter import ttk
 from tkinter import font
-from modulos.janela_principal_GUI import JanelaPrincipal
+from modulos.gui_janela_principal import JanelaPrincipal
 from modulos.db_tabelas_criar import CriarTabelasDB
 
 def main():
@@ -14,6 +14,6 @@ def main():
   JanelaPrincipal(root)
   root.mainloop()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   CriarTabelasDB()
   main()

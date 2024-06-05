@@ -7,7 +7,7 @@ import os
 import sqlite3
 
 class CrudTabelaAlunos():
-  local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
+  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
 
   def inserir(self, con, dados):
     try:
@@ -18,19 +18,19 @@ class CrudTabelaAlunos():
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print (f"Erro ao inserir na tabela ALUNOS: {erro}, {self.local}")
+      print (f'Erro ao inserir na tabela ALUNOS: {erro}, {self.local}')
 
   def ler(self, con) -> list: 
     try:
       with con:
         tabela = []
         cur = con.cursor()
-        cur.execute("SELECT * FROM ALUNOS")
+        cur.execute('SELECT * FROM ALUNOS')
         res = cur.fetchall()
         for i in res:
           tabela.append(i)
     except sqlite3.Error as erro:
-      print (f"Erro ao ler a tabela ALUNOS: {erro}, {self.local}")
+      print (f'Erro ao ler a tabela ALUNOS: {erro}, {self.local}')
     else:
       return tabela
   
@@ -44,19 +44,19 @@ class CrudTabelaAlunos():
                    WHERE id=?"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print (f"Erro ao atualizar na tabela ALUNOS: {erro}, {self.local}")
+      print (f'Erro ao atualizar na tabela ALUNOS: {erro}, {self.local}')
 
   def deletar(self, con, id):
       try:
         with con:          
           cur = con.cursor()
-          query = "DELETE FROM ALUNOS WHERE id=?"
+          query = 'DELETE FROM ALUNOS WHERE id=?'
           cur.execute(query, (id,))
       except sqlite3.Error as erro:
-          print(f"Erro ao deletar na tabela ALUNOS: {erro}, {self.local}")
+          print(f'Erro ao deletar na tabela ALUNOS: {erro}, {self.local}')
 
 class CriarTabelaAlunos():
-  local = f"(" + __qualname__ + " -> " + os.path.basename(__file__) + ")"
+  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
   
   def criar(self, con):
     try:
@@ -74,6 +74,6 @@ class CriarTabelaAlunos():
                     turma TEXT,
                     FOREIGN KEY (turma) REFERENCES TURMAS (nome)
                     ON DELETE CASCADE)""")
-        print("Tabela ALUNOS criada.")
+        print('Tabela ALUNOS pronta.')
     except sqlite3.Error as erro:
-      print (f"Erro ao criar tabela ALUNOS: {erro}, {self.local}")
+      print (f'Erro ao criar tabela ALUNOS: {erro}, {self.local}')
