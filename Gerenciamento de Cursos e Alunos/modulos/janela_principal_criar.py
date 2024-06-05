@@ -37,8 +37,7 @@ class JanelaPrincipal():
     self.criar()
 
   def criar(self):  
-    # Definir ttk styles e criar frames logo e menu
-    style = ttk.Style(self.root)
+    # Criar frames logo e menu
     frame_logo = ttk.Frame(self.root, width=1276, height=72, relief="raised")
     frame_logo.grid(row=0, column=0, columnspan=2, pady=2, padx=1, sticky="nsew")
     frame_menu = ttk.Frame(self.root, width=1276, height=60)
@@ -64,6 +63,7 @@ class JanelaPrincipal():
     lbl_txt.place(x=400, y=22)
 
     # Definir ttk styles para o bootstrap
+    style = ttk.Style(self.root)
     style.theme_create(
         "padrao", parent="alt", settings={
         "TNotebook":     {"configure": {"tabmargins": [2, 5, 2, 0] } },

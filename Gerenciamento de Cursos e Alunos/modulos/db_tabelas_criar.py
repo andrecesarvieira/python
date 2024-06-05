@@ -4,10 +4,10 @@
 
 import os
 import sys
-from modulos.db.conexao import ConectarBancodeDados
-from modulos.db.tabela_alunos import CriarTabelaAlunos
-from modulos.db.tabela_cursos import CriarTabelaCursos
-from modulos.db.tabela_turmas import CriarTabelaTurmas
+from modulos.db_conexao import ConectarBancodeDados
+from modulos.db_tabela_alunos import CriarTabelaAlunos
+from modulos.db_tabela_cursos import CriarTabelaCursos
+from modulos.db_tabela_turmas import CriarTabelaTurmas
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

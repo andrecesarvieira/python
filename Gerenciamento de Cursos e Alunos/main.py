@@ -7,7 +7,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 from modulos.janela_principal_criar import JanelaPrincipal
-from modulos.tabelas_db_criar import CriarTabelasDB
+from modulos.db_tabelas_criar import CriarTabelasDB
 
 def main():
   root = tk.Tk()
