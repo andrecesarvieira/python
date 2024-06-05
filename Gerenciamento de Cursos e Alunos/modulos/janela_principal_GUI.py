@@ -9,7 +9,7 @@ from tkinter import ttk
 from tkinter import font
 from PIL import Image, ImageTk
 
-from modulos.guia_aluno_criar import GuiaAlunos
+from modulos.guia_aluno_GUI import GuiaAlunos
 #from modulos.guia_cursos_criar import GuiaCursos -> à implementar
 #from modulos.guia_turmas_criar import GuiaTurmas -> à implementar
 

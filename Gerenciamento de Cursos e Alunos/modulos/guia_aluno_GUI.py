@@ -9,10 +9,10 @@ class GuiaAlunos():
     self.guia_alunos = guia_alunos
     self.style = style
 
-    self.criar_frames_alunos()
-    self.criar_widgets_alunos()
+    self.criar_frames()
+    self.criar_widgets()
 
-  def criar_frames_alunos(self):
+  def criar_frames(self):
     
     #Para teste
     self.style.configure('Frame1.TFrame', background='red')
@@ -28,7 +28,7 @@ class GuiaAlunos():
                                  relief="flat", border=0, borderwidth=0)
     self.frame_grade.grid(row=3, column=0, columnspan=2,pady=0, padx=1, sticky="nsew")
 
-  def criar_widgets_alunos(self):
+  def criar_widgets(self):
     # Destruir
     for widgets in self.frame_detalhes.winfo_children():
       widgets.destroy()

@@ -6,7 +6,7 @@ import tkinter as tk
 
 from tkinter import ttk
 from tkinter import font
-from modulos.janela_principal_criar import JanelaPrincipal
+from modulos.janela_principal_GUI import JanelaPrincipal
 from modulos.db_tabelas_criar import CriarTabelasDB
 
 def main():
