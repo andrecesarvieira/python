@@ -2,14 +2,13 @@
 # Autor...: André Vieira
 # Data....: 4/6/24 -> desenvolvimento
 
-import tkinter as tk
+import customtkinter
+from PIL import Image
 
-from datetime import datetime
-from tkinter import ttk
-from tkinter import font
-from PIL import Image, ImageTk
-
-from modulos.gui_guia_aluno import AbaAlunos
+from modulos.scr_padronizacao import cor
+from modulos.scr_padronizacao import fonte
+from modulos.msg_notificacao import Notificar
+from modulos.gui_aba_aluno import AbaAlunos
 # from modulos.guia_cursos_criar import GuiaCursos -> à implementar
 # from modulos.guia_turmas_criar import GuiaTurmas -> à implementar
 
@@ -17,7 +16,7 @@ class JanelaPrincipal():
     def __init__(self, root):
         self.root = root
         self.root.title('Gerenciamento de Escola')
-        self.root.resizable(False, False)
+        #self.root.resizable(False, False)
 
         # Centralizar o início da aplicação, considerando a resolução do sistema
         LARGURA = 1280
@@ -29,74 +28,44 @@ class JanelaPrincipal():
         y_coordenada = int((tela_altura / 2) - (ALTURA / 2))
         self.root.geometry(f'{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}')
 
-        # Definir cores e fontes
-        self.COR_FUNDO_LOGO = '#0E2B4A'
-        self.COR_FONTE_LOGO = '#FFFFFF'
-        self.FAM_FONTE_LOGO = font.Font(family='JetBrains Mono ExtraBold', name='logo', size=18, weight='normal')
-
-        self.COR_FONTE_PADRAO = '#0E2B4A'
-        self.FAM_FONTE_PADRAO = font.Font(family='Arial', name='padrao', size=8, weight='bold')
+        # Definir tema de acordo com as configurações do sistema operacional
+        customtkinter.set_appearance_mode('System')
+        customtkinter.set_default_color_theme('dark-blue')
 
         self.criar_frames()
         self.criar_widgets()
+        Notificar(self.frame_rodape, ' - Sistema no ar. Bom trabalho!')
     
     def criar_frames(self):
-        self.style = ttk.Style(self.root)
+        # Criar frames logo e menu
+        self.frame_topo = customtkinter.CTkFrame(master=self.root,height=50,
+                                                 bg_color=cor(1), fg_color=cor(1))
+        self.frame_topo.pack(fill='both')
 
-        # Criar frames logo e menu -> em implementação (cor de fundo do frame_logo não está funcionando)
-        self.style.configure('Logo.TFrame', background = self.COR_FUNDO_LOGO)
-        self.frame_topo = ttk.Frame(self.root, width=1278, height=50, style='Logo.TFrame')
-        self.frame_topo.config(borderwidth=2, relief='groove')
-        self.frame_topo.grid(row=0, padx=1, sticky='nsew')
-
-        self.frame_meio = ttk.Frame(self.root, width=1278, height=644)
-        self.frame_meio.config(borderwidth=2, relief='groove')
-        self.frame_meio.grid(row=1, padx=1, sticky='nsew')
-
-        self.frame_rodape = ttk.Frame(self.root, width=1278, height=25)
-        self.frame_rodape.config(borderwidth=2, relief='flat')
-        self.frame_rodape.grid(row=2, padx=1, sticky='nsew')
+        self.frame_meio = customtkinter.CTkFrame(self.root,height=644)
+        self.frame_meio.pack(fill='both')
+        
+        self.frame_rodape = customtkinter.CTkFrame(self.root,height=26)
+        self.frame_rodape.pack(fill='both')
 
     def criar_widgets(self):
         # Definir icone e descrição no frame_logo
-        o = Image.open(fp='imagens/img_alunos.png')
-        r = o.resize(size=(35, 35))
-        img = ImageTk.PhotoImage(r)
+        img = customtkinter.CTkImage(Image.open(r'imagens/img_alunos.png'), size=(35, 35))
+        lbl_logo_img = customtkinter.CTkLabel(master=self.frame_topo, image=img, text='')
+        lbl_logo_img.place(x=350, y=8)
+        lbl_logo_txt = customtkinter.CTkLabel(master=self.frame_topo, text='Escola de Desenvolvimento Python',
+                                              font=fonte(1), text_color=cor(2))
+        lbl_logo_txt.place(x=400, y=8)
 
-        lbl_logo_img = ttk.Label(self.frame_topo, image=img, compound='left', anchor='nw',
-                                 background=self.COR_FUNDO_LOGO)
-        lbl_logo_img.image = img
-        lbl_logo_img.place(x=340, y=4)
-        lbl_logo_txt = ttk.Label(self.frame_topo, text='Escola de Desenvolvimento Python', width=32,
-                                 compound='left', anchor='w', font=self.FAM_FONTE_LOGO,
-                                 foreground=self.COR_FONTE_LOGO, background=self.COR_FUNDO_LOGO)
-        lbl_logo_txt.place(x=400, y=6)
-
-        # Criação das abas (bootstrap) no frame_abas
-        abas = ttk.Notebook(self.frame_meio)
-        aba_alunos = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
-        aba_cursos = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
-        aba_turmas = ttk.Frame(abas, relief='groove', border=0, borderwidth=0)
-        abas.add(aba_alunos, text='Alunos')
-        abas.add(aba_cursos, text='Cursos')
-        abas.add(aba_turmas, text='Turmas')
+        # Criação das abas (bootstrap) no frame_abas        
+        abas = customtkinter.CTkTabview(master=self.frame_meio)
+        abas._segmented_button.configure(font=fonte(2), text_color=cor(2))
+        aba_aluno = abas.add('Alunos')
+        aba_cursos = abas.add('Cursos')
+        aba_turmas = abas.add('Turmas')
         abas.pack(expand=1, fill='both')
 
-        # Criar label de mensagem para o usuário no frame_msg
-        o = Image.open(fp='imagens/notificacao.png')
-        r = o.resize(size=(16, 14))
-        img2 = ImageTk.PhotoImage(r)
-        
-        lbl_msg_img = ttk.Label(self.frame_rodape, image=img2, anchor='w')
-        lbl_msg_img.image = img2
-        lbl_msg_img.place(x=0, y=0)
-
-        hora = datetime.now()
-        lbl_msg_txt = ttk.Label(self.frame_rodape, text=hora.strftime('%H:%M:%S') + ' - Sistema funcionando corretamente',
-                                anchor='nw', font=self.FAM_FONTE_PADRAO)
-        lbl_msg_txt.place(x=20, y=0)
-
         # Criação dos widgets alunos nas abas
-        alunos = AbaAlunos(aba_alunos, self.style)
-        # cursos = CriarFramesAlunos(aba_cursos) -> à implementar
-        # turmas = CriarFramesAlunos(aba_turmas) -> à implementar
+        #alunos = AbaAlunos(aba_aluno)
+        #cursos = AbaAlunos(abas('Cursos'))
+        #turmas = AbaAlunos(abas('Turmas'))
