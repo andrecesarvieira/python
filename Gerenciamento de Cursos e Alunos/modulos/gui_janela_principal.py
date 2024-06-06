@@ -29,7 +29,7 @@ class JanelaPrincipal():
         self.root.geometry(f'{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}')
 
         # Definir tema de acordo com as configurações do sistema operacional
-        customtkinter.set_appearance_mode('System')
+        customtkinter.set_appearance_mode('light')
         customtkinter.set_default_color_theme('dark-blue')
 
         self.criar_frames()
@@ -59,7 +59,7 @@ class JanelaPrincipal():
 
         # Criação das abas (bootstrap) no frame_abas        
         abas = customtkinter.CTkTabview(master=self.frame_meio)
-        abas._segmented_button.configure(font=fonte(2), text_color=cor(2))
+        abas._segmented_button.configure(font=fonte(2))
         aba_aluno = abas.add('Alunos')
         aba_cursos = abas.add('Cursos')
         aba_turmas = abas.add('Turmas')

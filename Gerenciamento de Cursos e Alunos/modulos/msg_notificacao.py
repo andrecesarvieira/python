@@ -12,15 +12,14 @@ from modulos.scr_padronizacao import fonte
 class Notificar():
   def __init__(self, frame_rodape, msg):
         # Criar label de mensagem para o usuário no frame_msg
-        img = customtkinter.CTkImage(light_image=Image.open(r'imagens/notificacao_light.png'), size=(16, 16))
-        img = customtkinter.CTkImage(dark_image=Image.open(r'imagens/notificacao_dark.png'), size=(16, 16))
-        
+        img = customtkinter.CTkImage(light_image=Image.open('imagens/notificacao.png'),
+                                     dark_image=Image.open('imagens/notificacao.png'), size=(16, 16))
         lbl_msg_img = customtkinter.CTkLabel(frame_rodape, image=img, text='', anchor='w')
-        lbl_msg_img.place(x=5, y=-1)
+        lbl_msg_img.place(x=7, y=-1)
 
         hora = datetime.now()
         lbl_msg_txt = customtkinter.CTkLabel(frame_rodape, text=hora.strftime('%H:%M:%S') + msg,
-                                anchor='nw', font=fonte(3), text_color=cor(2))
+                                anchor='nw', font=fonte(3))
         lbl_msg_txt.place(x=28, y=5)
         
         lbl_msg_img.after(10000, lambda: lbl_msg_img.destroy())
