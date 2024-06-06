@@ -19,8 +19,8 @@ class Notificar():
 
         hora = datetime.now()
         lbl_msg_txt = customtkinter.CTkLabel(frame_rodape, text=hora.strftime('%H:%M:%S') + msg,
-                                anchor='nw', font=fonte(3))
+                                anchor='nw')
         lbl_msg_txt.place(x=28, y=5)
         
-        lbl_msg_img.after(10000, lambda: lbl_msg_img.destroy())
-        lbl_msg_txt.after(10000, lambda: lbl_msg_txt.destroy())
+        lbl_msg_img.after(8000, lambda: lbl_msg_img.destroy())
+        lbl_msg_txt.after(8000, lambda: lbl_msg_txt.destroy())
