@@ -16,5 +16,7 @@ class TabTurmas():
         self.frm = Frames.criar(self.tab)
 
     def criar_widgets(self):
-        self.lbl = customtkinter.CTkEntry(master=self.frm)
-        self.lbl.place(x=100, y=100)
+        # Criar widgets apenas de retornou frame criado
+        if self.frm != None:
+            self.lbl = customtkinter.CTkEntry(master=self.frm)
+            self.lbl.place(x=100, y=100)
