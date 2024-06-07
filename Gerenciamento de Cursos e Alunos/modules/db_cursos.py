@@ -68,5 +68,7 @@ class CriarTabelaCursos():
         )""")
     except sqlite3.Error as erro:
       print (f'Erro ao criar tabela CURSOS: {erro}, {self.local}')
+      return erro
     else:
       print('Tabela CURSOS pronta.')
+      return None

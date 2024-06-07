@@ -69,5 +69,7 @@ class CriarTabelaTurmas():
                     ON UPDATE CASCADE ON DELETE CASCADE)""")
     except sqlite3.Error as erro:
       print (f'Erro ao criar tabela TURMAS: {erro}, {self.local}')
+      return erro
     else:
       print('Tabela TURMAS pronta.')
+      return None

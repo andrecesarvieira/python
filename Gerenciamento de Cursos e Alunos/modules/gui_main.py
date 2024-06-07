@@ -2,11 +2,13 @@
 # Autor...: André Vieira
 # Data....: 4/6/24 -> desenvolvimento
 
+import sys
 import customtkinter
 from PIL import Image
 
 from modules.scr_padronizacao import cor
 from modules.scr_padronizacao import fonte
+from modules.db_criar import CriarTabelasDB
 from modules.msg_notificacao import Notificacao
 from modules.gui_tab_alunos import TabAlunos
 from modules.gui_tab_cursos import TabCursos
@@ -15,12 +17,13 @@ from modules.gui_tab_turmas import TabTurmas
 class Main():
     def __init__(self, root):
         self.root = root
-        
+
         self.criar_janela()
         self.criar_frames()
         self.criar_widgets()
         Notificacao.criar(self.frm_rodape, ' - Sistema no ar. Bom trabalho!')
-    
+        self.banco_de_dados()
+
     def criar_janela(self):
         self.root.title('Gerenciamento de Escola')
         self.root.resizable(False, False)
@@ -36,7 +39,7 @@ class Main():
         self.root.geometry(f'{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}')
 
         # Definir tema de acordo com as configurações do sistema operacional
-        customtkinter.set_appearance_mode('dark')
+        customtkinter.set_appearance_mode('System')
         customtkinter.set_default_color_theme('dark-blue')
 
     def criar_frames(self):
@@ -84,3 +87,15 @@ class Main():
                 TabTurmas(self.tab_turmas)
             case 'Alunos':
                 TabAlunos(self.tab_alunos)
+    
+    def banco_de_dados(self):
+        res = CriarTabelasDB.criar()
+        rc1, rc2, rc3, rc4 = res
+        
+        if any(i is not None for i in [rc1, rc2, rc3, rc4]):
+            msg = ' - Problema com banco de dados. O programa será fechado.'
+            Notificacao.criar(self.frm_rodape, msg)
+            self.root.after(5000, self.encerrar_app)
+
+    def encerrar_app(self):
+        self.root.destroy()

@@ -74,6 +74,9 @@ class CriarTabelaAlunos():
                     turma TEXT,
                     FOREIGN KEY (turma) REFERENCES TURMAS (nome)
                     ON DELETE CASCADE)""")
-        print('Tabela ALUNOS pronta.')
     except sqlite3.Error as erro:
       print (f'Erro ao criar tabela ALUNOS: {erro}, {self.local}')
+      return erro
+    else:
+      print('Tabela ALUNOS pronta.')
+      return None

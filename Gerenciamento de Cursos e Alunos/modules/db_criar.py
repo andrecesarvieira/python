@@ -1,28 +1,28 @@
-# Objetivo: Criação das tabelas do banco de dados
+# Objetivo: Chama conexão e criação de tabelas
 # Autor...: André Vieira
 # Data....: 3/6/24
 
-import os
-import sys
+from modules.msg_notificacao import Notificacao
 from modules.db_conexao import ConectarBancodeDados
 from modules.db_alunos import CriarTabelaAlunos
 from modules.db_cursos import CriarTabelaCursos
 from modules.db_turmas import CriarTabelaTurmas
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 class CriarTabelasDB():
-  def __init__(self):
+  def criar() -> tuple:
     c = ConectarBancodeDados()
-    conexao = c.conectar()
-    
+    conexao = c.conectar()    
+
     if conexao:
       alunos = CriarTabelaAlunos()
       cursos = CriarTabelaCursos()
       turmas = CriarTabelaTurmas()
-      alunos.criar(conexao)
-      cursos.criar(conexao)
-      turmas.criar(conexao)
+      rc1 = alunos.criar(conexao)
+      rc2 = cursos.criar(conexao)
+      rc3 = turmas.criar(conexao)
       c.encerrar(conexao)
+      conexao = None
     else:
-      print('Não foi possível criar as tabelas do banco de dados.')
+      conexao = False
+    
+    return conexao, rc1, rc2, rc3

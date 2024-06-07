@@ -17,4 +17,4 @@ def fonte(n) -> str:
     case 2:
       return customtkinter.CTkFont(family='Ubuntu Medium', size=20) # Fonte tab
     case 3:
-      return customtkinter.CTkFont(family='Ubuntu Medium', size=15) # Fonte notifição
+      return customtkinter.CTkFont(family='Ubuntu Medium', size=13) # Fonte notifição

@@ -5,7 +5,6 @@
 import customtkinter
 
 from modules.gui_main import Main
-from modules.db_criar import CriarTabelasDB
 
 def main():
   root = customtkinter.CTk()
@@ -13,5 +12,4 @@ def main():
   root.mainloop()
 
 if __name__ == '__main__':
-  CriarTabelasDB()
   main()
