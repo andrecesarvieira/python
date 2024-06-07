@@ -2,21 +2,22 @@ import customtkinter
 
 class Frames():
     @staticmethod
-    def criar(aba) -> tuple:
-        # Criar CTkFrames na guia alunos
-        frame_menu = customtkinter.CTkFrame(aba, height=50)
-        frame_menu.pack(fill="x", expand=True)
-        
-        frame_corpo = customtkinter.CTkFrame(aba, height=320)
-        frame_corpo.pack(fill="x", expand=True)
-        
-        frame_grade = customtkinter.CTkFrame(aba, height=350)
-        frame_grade.pack(fill="x", expand=True)
+    def criar(tab) -> str:
+        # Caso os frames já tenham sido criados, retorna None
+        for i in tab.winfo_children():
+            if isinstance(i, customtkinter.CTkFrame):
+                return None
 
-        return frame_menu, frame_corpo, frame_grade
-    
+        # Criar frames nas tab passada por parametro
+        frm2_menu = customtkinter.CTkFrame(tab, height=50)
+        frm2_corpo = customtkinter.CTkFrame(tab, height=320)
+        frm2_grade = customtkinter.CTkFrame(tab, height=330)
+        frm2_menu.pack(fill="x", expand=False)
+        frm2_corpo.pack(fill="both", expand=True)
+        frm2_grade.pack(fill="x", expand=False)
+        
+        return frm2_corpo
+
     def widgets_menu():
-        
-        
         pass
         

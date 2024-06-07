@@ -6,16 +6,15 @@ import customtkinter
 from modules.gui_tab_frames import Frames
 
 class TabTurmas():
-    def __init__(self, aba):
-        self.aba = aba
+    def __init__(self, tab):
+        self.tab = tab
         self.criar_frames()
         self.criar_widgets()
 
     def criar_frames(self):
-        # Criar CTkFrames na guia alunos
-        f = Frames.criar(self.aba)
-        self.frame_menu, self.frame_corpo,self.frame_grade = f
+        # Criar frames na tab alunos
+        self.frm = Frames.criar(self.tab)
 
     def criar_widgets(self):
-        self.lbl = customtkinter.CTkEntry(master=self.frame_corpo)
+        self.lbl = customtkinter.CTkEntry(master=self.frm)
         self.lbl.place(x=100, y=100)
