@@ -6,6 +6,6 @@ def cor(n) -> str:
   if n == 3: return '#0E2B4A' # Cor Fonte padrão
 
 def fonte(n) -> str:
-  if n == 1: return customtkinter.CTkFont(family='JetBrains Mono ExtraBold', size=26) # Fonte logo
-  if n == 2: return customtkinter.CTkFont(family='JetBrains Mono Bold', size=18) # Fonte padrão
-  if n == 3: return customtkinter.CTkFont(family='Calibri', size=13, weight="bold") # Fonte notifição
+  if n == 1: return customtkinter.CTkFont(family='JetBrains Mono ExtraBold', size=34) # Fonte logo
+  if n == 2: return customtkinter.CTkFont(family='JetBrains Mono ExtraBold', size=22) # Fonte tab
+  if n == 3: return customtkinter.CTkFont(family='JetBrains Mono', size=16, weight="bold") # Fonte notifição

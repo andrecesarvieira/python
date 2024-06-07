@@ -13,13 +13,13 @@ class AbaCursos():
     def criar_frames(self):
 
         # Criar CTkFrames na guia alunos
-        self.frame_menu = customtkinter.CTkFrame(self.aba, width=1200, height=40)
+        self.frame_menu = customtkinter.CTkFrame(self.aba, height=50)
         self.frame_menu.pack(fill="x", expand=True)
         
-        self.frame_corpo = customtkinter.CTkFrame(self.aba, width=1200, height=290)
+        self.frame_corpo = customtkinter.CTkFrame(self.aba, height=320)
         self.frame_corpo.pack(fill="x", expand=True)
         
-        self.frame_grade = customtkinter.CTkFrame(self.aba, width=1200, height=260)
+        self.frame_grade = customtkinter.CTkFrame(self.aba, height=350)
         self.frame_grade.pack(fill="x", expand=True)
 
     def criar_widgets(self):
