@@ -4,12 +4,12 @@
 
 import customtkinter
 
-from modulos.gui_janela_principal import JanelaPrincipal
-from modulos.db_tabelas_criar import CriarTabelasDB
+from modules.gui_main import Main
+from modules.db_criar import CriarTabelasDB
 
 def main():
   root = customtkinter.CTk()
-  JanelaPrincipal(root)
+  Main(root)
   root.mainloop()
 
 if __name__ == '__main__':

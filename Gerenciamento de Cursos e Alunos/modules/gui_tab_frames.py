@@ -14,3 +14,9 @@ class Frames():
         frame_grade.pack(fill="x", expand=True)
 
         return frame_menu, frame_corpo, frame_grade
+    
+    def widgets_menu():
+        
+        
+        pass
+        

@@ -3,9 +3,9 @@
 # Data....: 5/6/24 -> desenvolvimento
 
 import customtkinter
-from modulos.gui_aba_frames import Frames
+from modules.gui_tab_frames import Frames
 
-class AbaCursos():
+class TabCursos():
     def __init__(self, aba):
         self.aba = aba
         self.criar_frames()
