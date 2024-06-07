@@ -7,7 +7,7 @@ from PIL import Image
 
 from modulos.scr_padronizacao import cor
 from modulos.scr_padronizacao import fonte
-from modulos.msg_notificacao import Notificar
+from modulos.msg_notificacao import Notificacao
 from modulos.gui_aba_alunos import AbaAlunos
 from modulos.gui_aba_cursos import AbaCursos
 from modulos.gui_aba_turmas import AbaTurmas
@@ -34,7 +34,7 @@ class JanelaPrincipal():
 
         self.criar_frames()
         self.criar_widgets()
-        Notificar(self.frame_rodape, ' - Sistema no ar. Bom trabalho!')
+        Notificacao.criar(self.frame_rodape, ' - Sistema no ar. Bom trabalho!')
     
     def criar_frames(self):
         # Criar frames logo e menu

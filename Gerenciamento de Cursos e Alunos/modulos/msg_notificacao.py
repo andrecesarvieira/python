@@ -9,8 +9,9 @@ from datetime import datetime
 from modulos.scr_padronizacao import cor
 from modulos.scr_padronizacao import fonte
 
-class Notificar():
-  def __init__(self, frame_rodape, msg):
+class Notificacao():
+  @staticmethod
+  def criar(frame_rodape, msg):
         # Criar label de mensagem para o usuário no frame_msg
         img = customtkinter.CTkImage(Image.open('imagens/notificacao.png'), size=(22, 22))
         lbl_msg_img = customtkinter.CTkLabel(frame_rodape, image=img, text='', anchor='w')

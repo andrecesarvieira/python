@@ -3,6 +3,7 @@
 # Data....: 5/6/24 -> desenvolvimento
 
 import customtkinter
+from modulos.gui_aba_frames import Frames
 
 class AbaTurmas():
     def __init__(self, aba):
@@ -11,16 +12,9 @@ class AbaTurmas():
         self.criar_widgets()
 
     def criar_frames(self):
-
         # Criar CTkFrames na guia alunos
-        self.frame_menu = customtkinter.CTkFrame(self.aba, height=50)
-        self.frame_menu.pack(fill="x", expand=True)
-        
-        self.frame_corpo = customtkinter.CTkFrame(self.aba, height=320)
-        self.frame_corpo.pack(fill="x", expand=True)
-        
-        self.frame_grade = customtkinter.CTkFrame(self.aba, height=350)
-        self.frame_grade.pack(fill="x", expand=True)
+        f = Frames.criar(self.aba)
+        self.frame_menu, self.frame_corpo,self.frame_grade = f
 
     def criar_widgets(self):
         self.lbl = customtkinter.CTkEntry(master=self.frame_corpo)
