@@ -76,7 +76,7 @@ class Main():
     def tab_clique(self):
         # Criação dos frames alunos nas abas
         tab = self.tab.get()
-        print('entrou aqui')
+
         match tab:
             case 'Cursos':
                 TabCursos(self.tab_cursos)
