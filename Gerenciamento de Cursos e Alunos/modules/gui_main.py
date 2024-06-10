@@ -8,22 +8,25 @@ from PIL import Image
 
 from modules.scr_padronizacao import cor
 from modules.scr_padronizacao import fonte
-from modules.db_criar import CriarTabelasDB
-from modules.msg_notificacao import Notificacao
+from modules.db_criar import CriarTabelasDB as DB
+from modules.msg_notificacao import Notificacao as Nt
 from modules.gui_tab_alunos import TabAlunos
 from modules.gui_tab_cursos import TabCursos
 from modules.gui_tab_turmas import TabTurmas
 
-class Main():
-    def __init__(self, root):
-        self.root = root
+class GuiMain:
+    def __init__(self):
+        self.root = customtkinter.CTk()
 
         self.criar_janela()
         self.criar_frames()
         self.criar_widgets()
-        Notificacao.criar(self.frm_rodape, ' - Sistema no ar. Bom trabalho!')
         self.banco_de_dados()
-
+        
+        Nt.criar(self.frm_rodape, ' - Sistema no ar. Bom trabalho!')
+        
+        self.root.mainloop()
+        
     def criar_janela(self):
         self.root.title('Gerenciamento de Escola')
         self.root.resizable(False, False)
@@ -45,9 +48,9 @@ class Main():
     def criar_frames(self):
         # Criar frames
         self.frm_topo = customtkinter.CTkFrame(master=self.root,height=80,
-                                               bg_color=cor(1), fg_color=cor(1))
-        self.frm_corpo = customtkinter.CTkFrame(self.root,height=790)
-        self.frm_rodape = customtkinter.CTkFrame(self.root,height=30)
+                                               bg_color=cor(1), fg_color=cor(1), corner_radius=0)
+        self.frm_corpo = customtkinter.CTkFrame(self.root,height=790, corner_radius=0)
+        self.frm_rodape = customtkinter.CTkFrame(self.root,height=30, corner_radius=0)
 
         self.frm_topo.pack(fill='x', expand=False)
         self.frm_corpo.pack(fill='both', expand=True)
@@ -60,41 +63,42 @@ class Main():
         lbl_logo_txt = customtkinter.CTkLabel(master=self.frm_topo, text='Escola de Desenvolvimento Python',
                                               font=fonte(1), text_color=cor(2))
         
-        lbl_logo_img.place(x=460, y=15)
-        lbl_logo_txt.place(x=530, y=18)
+        lbl_logo_img.place(x=410, y=15)
+        lbl_logo_txt.place(x=480, y=18)
 
         # Criar das tabs (bootstrap) no frame_tabs        
-        self.tab = customtkinter.CTkTabview(master=self.frm_corpo, command=self.tab_clique)
-        self.tab_cursos = self.tab.add('Cursos')
-        self.tab_turmas = self.tab.add('Turmas')
-        self.tab_alunos = self.tab.add('Alunos')
-        self.tab._segmented_button.configure(font=fonte(2), height=50)
-        
+        self.tab = customtkinter.CTkTabview(master=self.frm_corpo, command=self.tab_clique, text_color=cor(2))
+        self.tab_cursos = self.tab.add('   Cursos   ')
+        self.tab_turmas = self.tab.add('   Turmas   ')
+        self.tab_alunos = self.tab.add('   Alunos   ')
+        self.tab._segmented_button.configure(font=fonte(2), height=50, corner_radius=32, border_width=2)
         self.tab.pack(fill='both', expand=True)
                 
         # Carrega tab Cursos ao inciar o aplicativo
-        self.tab.set('Cursos')
-        Main.tab_clique(self)
+        self.tab.set('   Cursos   ')
+        self.tab_clique()
 
     def tab_clique(self):
         # Criação dos frames alunos nas abas
         tab = self.tab.get()
 
         match tab:
-            case 'Cursos':
+            case '   Cursos   ':
                 TabCursos(self.tab_cursos)
-            case 'Turmas':
+            case '   Turmas   ':
                 TabTurmas(self.tab_turmas)
-            case 'Alunos':
+            case '   Alunos   ':
                 TabAlunos(self.tab_alunos)
     
     def banco_de_dados(self):
-        res = CriarTabelasDB.criar()
+        res = DB.criar()
         rc1, rc2, rc3, rc4 = res
         
-        if any(i is not None for i in [rc1, rc2, rc3, rc4]):
+        # Essa expressão funciona porque o Python avalia None como False e qualquer valor diferente de None como True.
+        # Portanto, any() retornará True se pelo menos um dos valores não for None.
+        if any([rc1, rc2, rc3, rc4]):
             msg = ' - Problema com banco de dados. O programa será fechado.'
-            Notificacao.criar(self.frm_rodape, msg)
+            Nt.criar(self.frm_rodape, msg)
             self.root.after(5000, self.encerrar_app)
 
     def encerrar_app(self):

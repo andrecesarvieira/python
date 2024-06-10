@@ -6,8 +6,8 @@
 import os
 import sqlite3
 
-class CrudTabelaTurmas():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
+class CrudTabelaTurmas:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'
 
   def inserir(self, con, dados):
     try:
@@ -53,8 +53,8 @@ class CrudTabelaTurmas():
       except sqlite3.Error as erro:
           print(f'Erro ao deletar na tabela TURMAS: {erro}, {self.local}')
 
-class CriarTabelaTurmas():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'  
+class CriarTabelaTurmas:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'  
 
   def criar(self, con):
     try:

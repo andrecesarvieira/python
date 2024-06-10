@@ -5,7 +5,7 @@
 import os
 import sqlite3
 
-class ConectarBancodeDados():
+class ConectarBancodeDados:
   local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
 
   def __init__(self):
@@ -17,6 +17,7 @@ class ConectarBancodeDados():
       self.con = sqlite3.connect(self.arquivo)
     except sqlite3 as erro:
       print('Erro de conexão com banco de dados: ', erro, self.local)
+      return erro
     else:
       print('Conexão com banco de dados realizada.')
       return self.con
@@ -26,5 +27,7 @@ class ConectarBancodeDados():
       con.close()
     except sqlite3.Error as erro:
       print ('Erro ao tentar fechar o banco de dados', erro, self.local)
+      return erro
     else:
       print ('Conexão com banco de dados encerrada.')
+      return None

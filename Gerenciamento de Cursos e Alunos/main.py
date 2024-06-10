@@ -4,12 +4,7 @@
 
 import customtkinter
 
-from modules.gui_main import Main
-
-def main():
-  root = customtkinter.CTk()
-  Main(root)
-  root.mainloop()
+from modules.gui_main import GuiMain
 
 if __name__ == '__main__':
-  main()
+  GuiMain()

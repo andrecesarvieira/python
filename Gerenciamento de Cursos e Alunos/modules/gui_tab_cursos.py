@@ -5,11 +5,11 @@
 import customtkinter
 from modules.gui_tab_frames import Frames
 
-class TabCursos():
+class TabCursos:
     def __init__(self, tab):
         self.tab = tab
         self.criar_frames()
-        self.criar_widgets()
+        #self.criar_widgets()
 
     def criar_frames(self):
         # Criar frames na tab alunos

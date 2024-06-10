@@ -6,8 +6,8 @@
 import os
 import sqlite3
 
-class CrudTabelaCursos():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
+class CrudTabelaCursos:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'
 
   def inserir(self, con, dados):
     try:
@@ -53,8 +53,8 @@ class CrudTabelaCursos():
       except sqlite3.Error as erro:
           print(f'Erro ao deletar na tabela CURSOS: {erro}, {self.local}')
 
-class CriarTabelaCursos():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'  
+class CriarTabelaCursos:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'
 
   def criar(self, con):
     try:

@@ -3,18 +3,17 @@ import customtkinter
 def cor(n) -> str:
   match n:
     case 1:
-      return '#0E2B4A' # Cor Background logo
+      return '#14375E' # Cor Background logo
     case 2:
       return '#FFFFFF' # Cor Fonte branca
-    case 3:
-      return '#0E2B4A' # Cor Fonte padrão
 
 def fonte(n) -> str:
-  
   match n:
     case 1:
-      return customtkinter.CTkFont(family='Ubuntu Bold', size=34) # Fonte logo
+      return customtkinter.CTkFont(family='Lucida Sans', size=38, weight='bold') # Fonte logo
     case 2:
-      return customtkinter.CTkFont(family='Ubuntu Medium', size=20) # Fonte tab
+      return customtkinter.CTkFont(family='Lucida Sans', size=22, weight='bold') # Fonte tab
     case 3:
-      return customtkinter.CTkFont(family='Ubuntu Medium', size=13) # Fonte notifição
+      return customtkinter.CTkFont(family='Lucida Sans', size=11, weight='bold') # Fonte notifição
+    case 4:
+      return customtkinter.CTkFont(family='Lucida Sans', size=12, weight='bold') # Fonte botôes menu

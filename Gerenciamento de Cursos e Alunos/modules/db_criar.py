@@ -8,7 +8,7 @@ from modules.db_alunos import CriarTabelaAlunos
 from modules.db_cursos import CriarTabelaCursos
 from modules.db_turmas import CriarTabelaTurmas
 
-class CriarTabelasDB():
+class CriarTabelasDB:
   def criar() -> tuple:
     c = ConectarBancodeDados()
     conexao = c.conectar()    
@@ -22,7 +22,5 @@ class CriarTabelasDB():
       rc3 = turmas.criar(conexao)
       c.encerrar(conexao)
       conexao = None
-    else:
-      conexao = False
-    
+          
     return conexao, rc1, rc2, rc3

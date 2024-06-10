@@ -6,8 +6,8 @@
 import os
 import sqlite3
 
-class CrudTabelaAlunos():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
+class CrudTabelaAlunos:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'
 
   def inserir(self, con, dados):
     try:
@@ -19,6 +19,7 @@ class CrudTabelaAlunos():
         cur.execute(query, dados)
     except sqlite3.Error as erro:
       print (f'Erro ao inserir na tabela ALUNOS: {erro}, {self.local}')
+      return erro      
 
   def ler(self, con) -> list: 
     try:
@@ -31,6 +32,7 @@ class CrudTabelaAlunos():
           tabela.append(i)
     except sqlite3.Error as erro:
       print (f'Erro ao ler a tabela ALUNOS: {erro}, {self.local}')
+      return erro
     else:
       return tabela
   
@@ -45,6 +47,7 @@ class CrudTabelaAlunos():
         cur.execute(query, dados)
     except sqlite3.Error as erro:
       print (f'Erro ao atualizar na tabela ALUNOS: {erro}, {self.local}')
+      return erro      
 
   def deletar(self, con, id):
       try:
@@ -54,9 +57,10 @@ class CrudTabelaAlunos():
           cur.execute(query, (id,))
       except sqlite3.Error as erro:
           print(f'Erro ao deletar na tabela ALUNOS: {erro}, {self.local}')
+          return erro
 
-class CriarTabelaAlunos():
-  local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
+class CriarTabelaAlunos:
+  local = f'({__qualname__} -> {os.path.basename(__file__)})'
   
   def criar(self, con):
     try:
