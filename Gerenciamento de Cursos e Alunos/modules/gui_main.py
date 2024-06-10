@@ -18,7 +18,7 @@ class MainGui():
         self.root.resizable(False, False)
 
         self.centralizar_janela()
-        self.frame_pesquisa()
+        self.frame_topo()
         self.frame_principal()
         self.frame_rodape()
         self.frame_menu_compactado()
@@ -48,17 +48,21 @@ class MainGui():
         y_coordenada = int((tela_altura / 2) - (ALTURA / 2))
         self.root.geometry(f'{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}')
 
-    def frame_pesquisa(self):
+    def frame_topo(self):
         # Criar frame de pesquisa no topo
-        frm_search = customtkinter.CTkFrame(self.root, height=60, border_width=0, corner_radius=0)
-        frm_search.pack(side='top', expand=False, fill='x')
+        frm_topo = customtkinter.CTkFrame(self.root, height=60, border_width=1, corner_radius=0)
+        frm_topo.pack(side='top', expand=False, fill='x')
+        
+        FONT1 = customtkinter.CTkFont(family='Bebas Neue', size=40, weight='bold')
+        lbl_search = customtkinter.CTkLabel(frm_topo, height=55, text='Desenvolvimento em Pyhton e CustomTkinter', font=FONT1)
+        lbl_search.place(x=90, y=4.3)
 
-        FONT1 = customtkinter.CTkFont(family='Bebas Neue', size=18, weight='normal')
-        lbl_search = customtkinter.CTkLabel(frm_search, text='Pesquisar:', font=FONT1)
+        FONT2 = customtkinter.CTkFont(family='Bebas Neue', size=18, weight='normal')
+        lbl_search = customtkinter.CTkLabel(frm_topo, text='Pesquisar:', font=FONT2)
         lbl_search.place(x=1115, y=16)
 
-        self.entry_search = customtkinter.CTkEntry(frm_search, width=400, font=('Arial', 13, 'normal'), corner_radius=5,
-                                            placeholder_text='Digite o texto e tecle ENTER')
+        self.entry_search = customtkinter.CTkEntry(frm_topo, width=400, font=('Arial', 13, 'normal'),
+                                                    corner_radius=5, placeholder_text='Digite o texto e tecle ENTER')
         self.entry_search.place(x=1185, y=15)
 
     def frame_principal(self):
