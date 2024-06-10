@@ -4,7 +4,7 @@
 
 import customtkinter
 
-from modules.gui_main import GuiMain
+from modules.gui_main import MainGui
 
 if __name__ == '__main__':
-  GuiMain()
+  MainGui()

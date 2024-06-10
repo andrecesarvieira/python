@@ -2,35 +2,42 @@
 # Autor...: André Vieira
 # Data....: 4/6/24 -> desenvolvimento
 
-import sys
 import customtkinter
 from PIL import Image
 
-from modules.scr_padronizacao import cor
-from modules.scr_padronizacao import fonte
 from modules.db_criar import CriarTabelasDB as DB
 from modules.msg_notificacao import Notificacao as Nt
 from modules.gui_tab_alunos import TabAlunos
 from modules.gui_tab_cursos import TabCursos
 from modules.gui_tab_turmas import TabTurmas
 
-class GuiMain:
+class MainGui():
     def __init__(self):
         self.root = customtkinter.CTk()
-
-        self.criar_janela()
-        self.criar_frames()
-        self.criar_widgets()
-        self.banco_de_dados()
-        
-        Nt.criar(self.frm_rodape, ' - Sistema no ar. Bom trabalho!')
-        
-        self.root.mainloop()
-        
-    def criar_janela(self):
-        self.root.title('Gerenciamento de Escola')
+        self.root.title('UI Moderna Tkinter')
         self.root.resizable(False, False)
 
+        self.centralizar_janela()
+        self.frame_pesquisa()
+        self.frame_principal()
+        self.frame_rodape()
+        self.frame_menu_compactado()
+        self.banco_de_dados()
+
+        self.root.mainloop()
+
+    def sair_app(self):
+        self.root.destroy()    
+
+    def modo_aparencia(self):
+        # Configurações para mudar modo aparência
+        tema = customtkinter.get_appearance_mode()
+        if tema == 'Dark':
+            customtkinter.set_appearance_mode('light')
+        else:
+            customtkinter.set_appearance_mode('dark')
+
+    def centralizar_janela(self):
         # Centralizar o início da aplicação, considerando a resolução do sistema
         LARGURA = 1600
         ALTURA = 900
@@ -41,54 +48,86 @@ class GuiMain:
         y_coordenada = int((tela_altura / 2) - (ALTURA / 2))
         self.root.geometry(f'{LARGURA}x{ALTURA}+{x_coordenada}+{y_coordenada}')
 
-        # Definir tema de acordo com as configurações do sistema operacional
-        customtkinter.set_appearance_mode('System')
-        customtkinter.set_default_color_theme('dark-blue')
+    def frame_pesquisa(self):
+        # Criar frame de pesquisa no topo
+        frm_search = customtkinter.CTkFrame(self.root, height=60, border_width=0, corner_radius=0)
+        frm_search.pack(side='top', expand=False, fill='x')
 
-    def criar_frames(self):
-        # Criar frames
-        self.frm_topo = customtkinter.CTkFrame(master=self.root,height=80,
-                                               bg_color=cor(1), fg_color=cor(1), corner_radius=0)
-        self.frm_corpo = customtkinter.CTkFrame(self.root,height=790, corner_radius=0)
-        self.frm_rodape = customtkinter.CTkFrame(self.root,height=30, corner_radius=0)
+        FONT1 = customtkinter.CTkFont(family='Bebas Neue', size=18, weight='normal')
+        lbl_search = customtkinter.CTkLabel(frm_search, text='Pesquisar:', font=FONT1)
+        lbl_search.place(x=1115, y=16)
 
-        self.frm_topo.pack(fill='x', expand=False)
-        self.frm_corpo.pack(fill='both', expand=True)
-        self.frm_rodape.pack(fill='x', expand=False)
+        self.entry_search = customtkinter.CTkEntry(frm_search, width=400, font=('Arial', 13, 'normal'), corner_radius=5,
+                                            placeholder_text='Digite o texto e tecle ENTER')
+        self.entry_search.place(x=1185, y=15)
 
-    def criar_widgets(self):
-        # Definir icone e descrição no frame_logo
-        img = customtkinter.CTkImage(Image.open(r'pics/img_alunos.png'), size=(50, 50))
-        lbl_logo_img = customtkinter.CTkLabel(master=self.frm_topo, image=img, text='')
-        lbl_logo_txt = customtkinter.CTkLabel(master=self.frm_topo, text='Escola de Desenvolvimento Python',
-                                              font=fonte(1), text_color=cor(2))
+    def frame_principal(self):
+        # Criar frame principal
+        frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0)
+        frm_main.pack(expand=True, fill='both')
+
+        lbl_main = customtkinter.CTkLabel(frm_main, text='UI Moderna CustomTkinter', font=('Arial', 120))
+        lbl_main.pack(expand=True)
+
+    def frame_rodape(self):
+        self.frm_rodape = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0, height=30)
+        self.frm_rodape.pack(side='bottom', expand=False, fill='x')
+
+    def frame_menu_compactado(self):
+        self.frm_hub1 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=60,
+                                            border_width=0, corner_radius=0)
+        self.frm_hub1.place(x=0, y=0)
+
+        self.criar_widgets(self.frm_hub1)
+
+    def frame_menu_expandido(self):
+        def destruir():
+            self.frm_hub2.destroy()
         
-        lbl_logo_img.place(x=410, y=15)
-        lbl_logo_txt.place(x=480, y=18)
+        # Frame do menu expandido
+        self.frm_hub2 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=230,
+                                        border_width=0, corner_radius=0)
+        self.frm_hub2.place(x=0, y=0)
 
-        # Criar das tabs (bootstrap) no frame_tabs        
-        self.tab = customtkinter.CTkTabview(master=self.frm_corpo, command=self.tab_clique, text_color=cor(2))
-        self.tab_cursos = self.tab.add('   Cursos   ')
-        self.tab_turmas = self.tab.add('   Turmas   ')
-        self.tab_alunos = self.tab.add('   Alunos   ')
-        self.tab._segmented_button.configure(font=fonte(2), height=50, corner_radius=32, border_width=2)
-        self.tab.pack(fill='both', expand=True)
-                
-        # Carrega tab Cursos ao inciar o aplicativo
-        self.tab.set('   Cursos   ')
-        self.tab_clique()
+        # Botão fechar -> compactar menu
+        img = customtkinter.CTkImage(Image.open('pics//fechar.png'), size=(40, 40))
+        btn_hub = customtkinter.CTkButton(self.frm_hub2, image=img, width=50, text='',
+                                                border_width=0, corner_radius=0, command=destruir,
+                                                fg_color='transparent', hover_color='gray')
+        btn_hub.place(x=5, y=5)    
 
-    def tab_clique(self):
-        # Criação dos frames alunos nas abas
-        tab = self.tab.get()
+        # Label do botão Sair
+        FONT2 = customtkinter.CTkFont(family='Bebas Neue', size=26, weight='normal')
+        lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Sair do programa', font=FONT2,
+                                        text_color='#1C1C1C')
+        lbl_sair.place(x=60, y=854)
 
-        match tab:
-            case '   Cursos   ':
-                TabCursos(self.tab_cursos)
-            case '   Turmas   ':
-                TabTurmas(self.tab_turmas)
-            case '   Alunos   ':
-                TabAlunos(self.tab_alunos)
+        self.criar_widgets(self.frm_hub2)
+
+    def criar_widgets(self, frame):
+        self.frame = frame
+
+        # Botão abrir -> expandir menu
+        img = customtkinter.CTkImage(Image.open('pics//abrir.png'), size=(40, 40))
+        btn_hub = customtkinter.CTkButton(self.frm_hub1, image=img, width=50, text='',
+                                                border_width=0, corner_radius=0, command=self.frame_menu_expandido,
+                                                fg_color='transparent', hover_color='gray')
+        btn_hub.place(x=5, y=5)
+
+        # Criar botão trocar modo de aparência
+        self.img_modo = customtkinter.CTkImage(light_image=Image.open('pics//mudar_escuro.png'),
+                                            dark_image=Image.open('pics//mudar_claro.png'), size=(40, 40))
+        self.btn_modo = customtkinter.CTkButton(self.frame, image=self.img_modo, width=50, text='',
+                                            border_width=0, corner_radius=0, command=self.modo_aparencia,
+                                            fg_color='transparent', hover_color='gray')
+        self.btn_modo.place(x=5, y=787)
+
+        # Botão sair do programa
+        img_sair = customtkinter.CTkImage(Image.open('pics//sair.png'), size=(40, 40))
+        btn_sair = customtkinter.CTkButton(self.frame, image=img_sair, width=50, text='',
+                                                border_width=0, corner_radius=0, command=self.sair_app,
+                                                fg_color='transparent', hover_color='gray')
+        btn_sair.place(x=5, y=845)
     
     def banco_de_dados(self):
         res = DB.criar()
@@ -97,9 +136,8 @@ class GuiMain:
         # Essa expressão funciona porque o Python avalia None como False e qualquer valor diferente de None como True.
         # Portanto, any() retornará True se pelo menos um dos valores não for None.
         if any([rc1, rc2, rc3, rc4]):
-            msg = ' - Problema com banco de dados. O programa será fechado.'
+            msg = 'Problema com banco de dados. O programa será fechado.'
             Nt.criar(self.frm_rodape, msg)
             self.root.after(5000, self.encerrar_app)
-
-    def encerrar_app(self):
-        self.root.destroy()
+        else:
+            Nt.criar(self.frm_rodape, 'Sistema no ar. Bom trabalho!')        
