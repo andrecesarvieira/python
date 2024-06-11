@@ -19,11 +19,11 @@ class Notificacao:
         hora = datetime.now()
         lbl_hora = customtkinter.CTkLabel(frame_rodape, text="  -  " + hora.strftime('%H:%M:%S'),
                                           compound="right", justify="right", anchor="e", font=fonte(3))
-        lbl_hora.place(x=1495, y=1)
+        lbl_hora.place(x=1505, y=1)
         
         lbl_msg_txt = customtkinter.CTkLabel(frame_rodape, text=msg, font=fonte(3), width=200,
                                              compound="right", justify="right", anchor="e")
-        lbl_msg_txt.place(x=1290, y=1)        
+        lbl_msg_txt.place(x=1300, y=1)        
         
         lbl_msg_img.after(10000, lambda: lbl_msg_img.destroy())
         lbl_hora.after(10000, lambda: lbl_hora.destroy())

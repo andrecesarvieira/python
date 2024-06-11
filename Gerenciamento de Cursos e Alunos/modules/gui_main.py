@@ -3,15 +3,18 @@
 # Data....: 4/6/24 -> desenvolvimento
 
 import customtkinter
+
 from PIL import Image
+from custom_hovertip import CustomTooltipLabel
 
 from modules.db_criar import CriarTabelasDB as DB
 from modules.msg_notificacao import Notificacao as Nt
+from modules.scr_padronizacao import fonte
 from modules.gui_tab_alunos import TabAlunos
 from modules.gui_tab_cursos import TabCursos
 from modules.gui_tab_turmas import TabTurmas
 
-class MainGui():
+class MainGui:
     def __init__(self):
         self.root = customtkinter.CTk()
         self.root.title('UI Moderna Tkinter')
@@ -50,27 +53,39 @@ class MainGui():
 
     def frame_topo(self):
         # Criar frame de pesquisa no topo
-        frm_topo = customtkinter.CTkFrame(self.root, height=60, border_width=1, corner_radius=0)
-        frm_topo.pack(side='top', expand=False, fill='x')
+        self.frm_topo = customtkinter.CTkFrame(self.root, height=60, border_width=1, corner_radius=0)
+        self.frm_topo.pack(side='top', expand=False, fill='x')
         
-        FONT1 = customtkinter.CTkFont(family='Bebas Neue', size=40, weight='bold')
-        lbl_search = customtkinter.CTkLabel(frm_topo, height=55, text='Desenvolvimento em Pyhton e CustomTkinter', font=FONT1)
+        self.widgets_frame_topo()
+
+    def widgets_frame_topo(self):
+        def entry_foco():
+            self.entry_search.focus()
+
+        lbl_search = customtkinter.CTkLabel(self.frm_topo, height=55, text='Desenvolvimento em Pyhton e CustomTkinter',
+                                            font=fonte(1))
         lbl_search.place(x=90, y=4.3)
 
-        FONT2 = customtkinter.CTkFont(family='Bebas Neue', size=18, weight='normal')
-        lbl_search = customtkinter.CTkLabel(frm_topo, text='Pesquisar:', font=FONT2)
+        lbl_search = customtkinter.CTkLabel(self.frm_topo, text='Pesquisar:', font=fonte(2))
         lbl_search.place(x=1115, y=16)
 
-        self.entry_search = customtkinter.CTkEntry(frm_topo, width=400, font=('Arial', 13, 'normal'),
-                                                    corner_radius=5, placeholder_text='Digite o texto e tecle ENTER')
+        self.entry_search = customtkinter.CTkEntry(self.frm_topo, width=400, font=('Arial', 13, 'normal'),
+                                                    corner_radius=5, placeholder_text='Tecle "Alt + P" para pesquisar')
         self.entry_search.place(x=1185, y=15)
+
+        # Tecla ESCAPE fecha o menu expandido
+        self.root.bind('<Alt-p>', lambda event: entry_foco())
+        self.root.bind('<Alt-P>', lambda event: entry_foco())
 
     def frame_principal(self):
         # Criar frame principal
-        frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0)
-        frm_main.pack(expand=True, fill='both')
+        self.frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0)
+        self.frm_main.pack(expand=True, fill='both')
+        
+        self.widgets_frame_principal()
 
-        lbl_main = customtkinter.CTkLabel(frm_main, text='UI Moderna CustomTkinter', font=('Arial', 120))
+    def widgets_frame_principal(self):
+        lbl_main = customtkinter.CTkLabel(self.frm_main, text='UI Moderna CustomTkinter', font=('Arial', 120))
         lbl_main.pack(expand=True)
 
     def frame_rodape(self):
@@ -82,16 +97,20 @@ class MainGui():
                                             border_width=0, corner_radius=0)
         self.frm_hub1.place(x=0, y=0)
 
-        self.criar_widgets(self.frm_hub1)
+        self.widgets_comuns(self.frm_hub1)
 
     def frame_menu_expandido(self):
-        def destruir():
-            self.frm_hub2.destroy()
-        
         # Frame do menu expandido
-        self.frm_hub2 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=230,
+        self.frm_hub2 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=250,
                                         border_width=0, corner_radius=0)
         self.frm_hub2.place(x=0, y=0)
+       
+        self.widgets_menu_expandido()
+        self.widgets_comuns(self.frm_hub2)
+
+    def widgets_menu_expandido(self):
+        def destruir():
+            self.frm_hub2.destroy()
 
         # Botão fechar -> compactar menu
         img = customtkinter.CTkImage(Image.open('pics//fechar.png'), size=(40, 40))
@@ -99,16 +118,23 @@ class MainGui():
                                                 border_width=0, corner_radius=0, command=destruir,
                                                 fg_color='transparent', hover_color='gray')
         btn_hub.place(x=5, y=5)    
+        CustomTooltipLabel(anchor_widget=btn_hub, text='Pressione ESC para fechar', border=1, background='lightgray',
+                           width=25, font=('Arial', 9, 'bold'))
 
+        # Label do botão mudar aparência
+        lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Tema claro/escuro', font=fonte(4),
+                                        text_color='#1C1C1C')
+        lbl_sair.place(x=60, y=797)
+        
         # Label do botão Sair
-        FONT2 = customtkinter.CTkFont(family='Bebas Neue', size=26, weight='normal')
-        lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Sair do programa', font=FONT2,
+        lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Sair do programa', font=fonte(4),
                                         text_color='#1C1C1C')
         lbl_sair.place(x=60, y=854)
 
-        self.criar_widgets(self.frm_hub2)
+        # Tecla ESCAPE fecha o menu expandido
+        self.root.bind('<Escape>', lambda event: destruir())
 
-    def criar_widgets(self, frame):
+    def widgets_comuns(self, frame):
         self.frame = frame
 
         # Botão abrir -> expandir menu
@@ -142,6 +168,6 @@ class MainGui():
         if any([rc1, rc2, rc3, rc4]):
             msg = 'Problema com banco de dados. O programa será fechado.'
             Nt.criar(self.frm_rodape, msg)
-            self.root.after(5000, self.encerrar_app)
+            self.root.after(5000, self.sair_app)
         else:
             Nt.criar(self.frm_rodape, 'Sistema no ar. Bom trabalho!')        

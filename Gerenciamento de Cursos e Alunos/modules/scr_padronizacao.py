@@ -10,10 +10,10 @@ def cor(n) -> str:
 def fonte(n) -> str:
   match n:
     case 1:
-      return customtkinter.CTkFont(family='Lucida Sans', size=38, weight='bold') # Fonte logo
+      return customtkinter.CTkFont(family='Bebas Neue', size=40, weight='bold') # Fonte logo
     case 2:
-      return customtkinter.CTkFont(family='Lucida Sans', size=22, weight='bold') # Fonte tab
+      return customtkinter.CTkFont(family='Bebas Neue', size=18, weight='normal') # Fonte pesquisar
     case 3:
-      return customtkinter.CTkFont(family='Lucida Sans', size=11, weight='bold') # Fonte notifição
+      return customtkinter.CTkFont(family='Sans Seriff Collection Regular', size=11, weight='bold') # Fonte notifição
     case 4:
-      return customtkinter.CTkFont(family='Lucida Sans', size=12, weight='bold') # Fonte botôes menu
+      return customtkinter.CTkFont(family='Bebas Neue', size=26, weight='normal') # Fonte botôes menu
