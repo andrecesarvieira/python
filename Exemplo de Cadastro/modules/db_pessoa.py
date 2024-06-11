@@ -1,24 +1,24 @@
-# Objetivo: Criação da tabela ALUNOS
-#           CRUD da tabela ALUNOS
+# Objetivo: Criação da tabela
+#           CRUD
 # Autor...: André Vieira
 # Data....: 2/6/24
 
 import os
 import sqlite3
 
-class CrudTabelaAlunos:
+class CrudTabela:
   local = f'({__qualname__} -> {os.path.basename(__file__)})'
 
   def inserir(self, con, dados):
     try:
       with con:
         cur = con.cursor()
-        query = """INSERT INTO ALUNOS (cpf, nome, email, telefone, sexo, foto,
-                   data_nascimento, turma)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+        query = """INSERT INTO PESSOA (cpf, nome, email, telefone, sexo, foto,
+                   data_nascimento)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print (f'Erro ao inserir na tabela ALUNOS: {erro}, {self.local}')
+      print (f'Erro ao inserir na tabela PESSOA: {erro}, {self.local}')
       return erro      
 
   def ler(self, con) -> list: 
@@ -26,12 +26,12 @@ class CrudTabelaAlunos:
       with con:
         tabela = []
         cur = con.cursor()
-        cur.execute('SELECT * FROM ALUNOS')
+        cur.execute('SELECT * FROM PESSOA')
         res = cur.fetchall()
         for i in res:
           tabela.append(i)
     except sqlite3.Error as erro:
-      print (f'Erro ao ler a tabela ALUNOS: {erro}, {self.local}')
+      print (f'Erro ao ler a tabela PESSOA: {erro}, {self.local}')
       return erro
     else:
       return tabela
@@ -40,33 +40,33 @@ class CrudTabelaAlunos:
     try:
       with con:
         cur = con.cursor()
-        query = """UPDATE ALUNOS
+        query = """UPDATE PESSOA
                    SET nome=?, email=?, telefone=?, sexo=?, foto=?,
-                       data_nascimento=?, turma=?
+                       data_nascimento=?
                    WHERE id=?"""
         cur.execute(query, dados)
     except sqlite3.Error as erro:
-      print (f'Erro ao atualizar na tabela ALUNOS: {erro}, {self.local}')
+      print (f'Erro ao atualizar na tabela PESSOA: {erro}, {self.local}')
       return erro      
 
   def deletar(self, con, id):
       try:
         with con:          
           cur = con.cursor()
-          query = 'DELETE FROM ALUNOS WHERE id=?'
+          query = 'DELETE FROM PESSOA WHERE id=?'
           cur.execute(query, (id,))
       except sqlite3.Error as erro:
-          print(f'Erro ao deletar na tabela ALUNOS: {erro}, {self.local}')
+          print(f'Erro ao deletar na tabela PESSOA: {erro}, {self.local}')
           return erro
 
-class CriarTabelaAlunos:
+class CriarTabela:
   local = f'({__qualname__} -> {os.path.basename(__file__)})'
   
   def criar(self, con):
     try:
       with con:
         cur = con.cursor()
-        cur.execute(""" CREATE TABLE IF NOT EXISTS ALUNOS(
+        cur.execute(""" CREATE TABLE IF NOT EXISTS PESSOA(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     cpf TEXT,
                     nome TEXT,
@@ -74,13 +74,10 @@ class CriarTabelaAlunos:
                     telefone TEXT,
                     sexo TEXT,
                     foto TEXT,
-                    data_nascimento DATE,
-                    turma TEXT,
-                    FOREIGN KEY (turma) REFERENCES TURMAS (nome)
-                    ON DELETE CASCADE)""")
+                    data_nascimento DATE) """)
     except sqlite3.Error as erro:
-      print (f'Erro ao criar tabela ALUNOS: {erro}, {self.local}')
+      print (f'Erro ao criar tabela PESSOA: {erro}, {self.local}')
       return erro
     else:
-      print('Tabela ALUNOS pronta.')
+      print('Tabela PESSOA pronta.')
       return None

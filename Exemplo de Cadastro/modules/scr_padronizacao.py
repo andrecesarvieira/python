@@ -16,4 +16,4 @@ def fonte(n) -> str:
     case 3:
       return customtkinter.CTkFont(family='Sans Seriff Collection Regular', size=11, weight='bold') # Fonte notifição
     case 4:
-      return customtkinter.CTkFont(family='Bebas Neue', size=26, weight='normal') # Fonte botôes menu
+      return customtkinter.CTkFont(family='Bebas Neue', size=20, weight='normal') # Fonte botôes menu

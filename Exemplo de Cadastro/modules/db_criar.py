@@ -2,11 +2,8 @@
 # Autor...: André Vieira
 # Data....: 3/6/24
 
-from modules.msg_notificacao import Notificacao
 from modules.db_conexao import ConectarBancodeDados
-from modules.db_alunos import CriarTabelaAlunos
-from modules.db_cursos import CriarTabelaCursos
-from modules.db_turmas import CriarTabelaTurmas
+from modules.db_pessoa import CriarTabela
 
 class CriarTabelasDB:
   def criar() -> tuple:
@@ -14,13 +11,9 @@ class CriarTabelasDB:
     conexao = c.conectar()    
 
     if conexao:
-      alunos = CriarTabelaAlunos()
-      cursos = CriarTabelaCursos()
-      turmas = CriarTabelaTurmas()
-      rc1 = alunos.criar(conexao)
-      rc2 = cursos.criar(conexao)
-      rc3 = turmas.criar(conexao)
+      pessoa = CriarTabela()
+      rc1 = pessoa.criar(conexao)
       c.encerrar(conexao)
       conexao = None
           
-    return conexao, rc1, rc2, rc3
+    return conexao, rc1

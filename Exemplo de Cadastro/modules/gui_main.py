@@ -5,14 +5,11 @@
 import customtkinter
 
 from PIL import Image
-from custom_hovertip import CustomTooltipLabel
 
 from modules.db_criar import CriarTabelasDB as DB
 from modules.msg_notificacao import Notificacao as Nt
 from modules.scr_padronizacao import fonte
-from modules.gui_tab_alunos import TabAlunos
-from modules.gui_tab_cursos import TabCursos
-from modules.gui_tab_turmas import TabTurmas
+from modules.gui_pessoa import FramesPessoa
 
 class MainGui:
     def __init__(self):
@@ -26,6 +23,8 @@ class MainGui:
         self.frame_rodape()
         self.frame_menu_compactado()
         self.banco_de_dados()
+        
+        FramesPessoa.criar(self.frm_main)
 
         self.root.mainloop()
 
@@ -79,17 +78,12 @@ class MainGui:
 
     def frame_principal(self):
         # Criar frame principal
-        self.frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0)
-        self.frm_main.pack(expand=True, fill='both')
-        
-        self.widgets_frame_principal()
-
-    def widgets_frame_principal(self):
-        lbl_main = customtkinter.CTkLabel(self.frm_main, text='UI Moderna CustomTkinter', font=('Arial', 120))
-        lbl_main.pack(expand=True)
+        self.frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0,
+                                               height=810)
+        self.frm_main.pack(expand=False, fill='x')
 
     def frame_rodape(self):
-        self.frm_rodape = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0, height=30)
+        self.frm_rodape = customtkinter.CTkFrame(self.root, border_width=1, corner_radius=0, height=30)
         self.frm_rodape.pack(side='bottom', expand=False, fill='x')
 
     def frame_menu_compactado(self):
@@ -101,7 +95,7 @@ class MainGui:
 
     def frame_menu_expandido(self):
         # Frame do menu expandido
-        self.frm_hub2 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=250,
+        self.frm_hub2 = customtkinter.CTkFrame(self.root, fg_color='gray', height=900, width=230,
                                         border_width=0, corner_radius=0)
         self.frm_hub2.place(x=0, y=0)
        
@@ -118,8 +112,6 @@ class MainGui:
                                                 border_width=0, corner_radius=0, command=destruir,
                                                 fg_color='transparent', hover_color='gray')
         btn_hub.place(x=5, y=5)    
-        CustomTooltipLabel(anchor_widget=btn_hub, text='Pressione ESC para fechar', border=1, background='lightgray',
-                           width=25, font=('Arial', 9, 'bold'))
 
         # Label do botão mudar aparência
         lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Tema claro/escuro', font=fonte(4),
@@ -161,11 +153,11 @@ class MainGui:
     
     def banco_de_dados(self):
         res = DB.criar()
-        rc1, rc2, rc3, rc4 = res
+        conexao, rc1 = res
         
         # Essa expressão funciona porque o Python avalia None como False e qualquer valor diferente de None como True.
         # Portanto, any() retornará True se pelo menos um dos valores não for None.
-        if any([rc1, rc2, rc3, rc4]):
+        if any([conexao, rc1]):
             msg = 'Problema com banco de dados. O programa será fechado.'
             Nt.criar(self.frm_rodape, msg)
             self.root.after(5000, self.sair_app)

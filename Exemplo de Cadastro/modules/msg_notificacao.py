@@ -13,17 +13,19 @@ class Notificacao:
   def criar(frame_rodape, msg):
         # Criar label de mensagem para o usuário no frame_msg
         img = customtkinter.CTkImage(Image.open('pics/img_notificacao.png'), size=(18,18))
-        lbl_msg_img = customtkinter.CTkLabel(frame_rodape, image=img, text='', anchor='w')
-        lbl_msg_img.place(x=1575, y=1)
+        
+        lbl_msg_img = customtkinter.CTkLabel(frame_rodape, image=img, text='', anchor='w',
+                                             compound="left", justify="left")
+        lbl_msg_img.place(x=70, y=1)
 
         hora = datetime.now()
-        lbl_hora = customtkinter.CTkLabel(frame_rodape, text="  -  " + hora.strftime('%H:%M:%S'),
-                                          compound="right", justify="right", anchor="e", font=fonte(3))
-        lbl_hora.place(x=1505, y=1)
+        lbl_hora = customtkinter.CTkLabel(frame_rodape, text=hora.strftime('%H:%M:%S') + "  -  ",
+                                          compound="left", justify="left", anchor="w", font=fonte(3))
+        lbl_hora.place(x=95, y=1)
         
         lbl_msg_txt = customtkinter.CTkLabel(frame_rodape, text=msg, font=fonte(3), width=200,
-                                             compound="right", justify="right", anchor="e")
-        lbl_msg_txt.place(x=1300, y=1)        
+                                             compound="left", justify="left", anchor="w")
+        lbl_msg_txt.place(x=152, y=1)        
         
         lbl_msg_img.after(10000, lambda: lbl_msg_img.destroy())
         lbl_hora.after(10000, lambda: lbl_hora.destroy())
