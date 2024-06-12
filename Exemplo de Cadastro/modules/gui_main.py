@@ -24,7 +24,8 @@ class MainGui:
         self.frame_menu_compactado()
         self.banco_de_dados()
         
-        FramesPessoa.criar(self.frm_main)
+        frm_pessoa = FramesPessoa()
+        frm_pessoa.criar(self.frm_main)
 
         self.root.mainloop()
 
@@ -79,8 +80,8 @@ class MainGui:
     def frame_principal(self):
         # Criar frame principal
         self.frm_main = customtkinter.CTkFrame(self.root, border_width=0, corner_radius=0,
-                                               height=810)
-        self.frm_main.pack(expand=False, fill='x')
+                                               height=809, width=1539)
+        self.frm_main.place(x=61, y=61)
 
     def frame_rodape(self):
         self.frm_rodape = customtkinter.CTkFrame(self.root, border_width=1, corner_radius=0, height=30)
@@ -116,12 +117,12 @@ class MainGui:
         # Label do botão mudar aparência
         lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Tema claro/escuro', font=fonte(4),
                                         text_color='#1C1C1C')
-        lbl_sair.place(x=60, y=797)
+        lbl_sair.place(x=60, y=799)
         
         # Label do botão Sair
         lbl_sair = customtkinter.CTkLabel(self.frm_hub2, text = 'Sair do programa', font=fonte(4),
                                         text_color='#1C1C1C')
-        lbl_sair.place(x=60, y=854)
+        lbl_sair.place(x=60, y=856)
 
         # Tecla ESCAPE fecha o menu expandido
         self.root.bind('<Escape>', lambda event: destruir())

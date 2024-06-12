@@ -13,7 +13,7 @@ class CrudTabela:
     try:
       with con:
         cur = con.cursor()
-        query = """INSERT INTO PESSOA (cpf, nome, email, telefone, sexo, foto,
+        query = """INSERT INTO PESSOA (cpf, nome, email, celular, sexo, foto,
                    data_nascimento)
                    VALUES (?, ?, ?, ?, ?, ?, ?)"""
         cur.execute(query, dados)
@@ -41,7 +41,7 @@ class CrudTabela:
       with con:
         cur = con.cursor()
         query = """UPDATE PESSOA
-                   SET nome=?, email=?, telefone=?, sexo=?, foto=?,
+                   SET cpf=?, nome=?, email=?, celular=?, sexo=?, foto=?,
                        data_nascimento=?
                    WHERE id=?"""
         cur.execute(query, dados)
@@ -71,7 +71,7 @@ class CriarTabela:
                     cpf TEXT,
                     nome TEXT,
                     email TEXT,
-                    telefone TEXT,
+                    celular TEXT,
                     sexo TEXT,
                     foto TEXT,
                     data_nascimento DATE) """)
