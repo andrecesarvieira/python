@@ -12,9 +12,9 @@ class appCalcGUI:
 
     def criarWidgets(self):
         self.criarAreaTexto()
-        self.criarBotoes()
-        self.criarLabelResultado()
-        self.criarArvoreCampos()
+        #self.criarBotoes()
+        #self.criarLabelResultado()
+        #self.criarArvoreCampos()
 
     def criarAreaTexto(self):
         self.frame = ttk.Frame(self.root)
