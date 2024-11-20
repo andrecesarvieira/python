@@ -1,90 +1,152 @@
 import re
-import tkinter as tk
-from tkinter import ttk
-import sv_ttk
+import sys
+
+try:
+    import gi
+except ModuleNotFoundError:
+    print("Erro: O módulo 'gi' não está instalado. Você pode instalá-lo usando o comando 'pip install PyGObject'.")
+    sys.exit(1)
+
+
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
+
 
 class appCalcGUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Calculadora de Área COBOL")
-        self.root.resizable(False, False)
-        self.criarWidgets()
+    def __init__(self):
+        self.builder = Gtk.Builder()
+        self.builder.add_from_string(self.get_glade_content())
+        self.builder.connect_signals(self)
 
-    def criarWidgets(self):
-        self.criarAreaTexto()
-        #self.criarBotoes()
-        #self.criarLabelResultado()
-        #self.criarArvoreCampos()
+        # Widgets principais
+        self.window = self.builder.get_object("main_window")
+        self.area_texto = self.builder.get_object("area_texto")
+        self.label_resultado = self.builder.get_object("label_resultado")
+        self.treeview = self.builder.get_object("treeview")
+        self.liststore = self.builder.get_object("liststore")
 
-    def criarAreaTexto(self):
-        self.frame = ttk.Frame(self.root)
-        self.frame.grid(row=0, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+        # Configurando a TreeView
+        self.configurar_treeview()
 
-        self.area_texto = tk.Text(self.frame, bd=1, relief='groove', wrap="none")
+        self.window.show_all()
 
-        vsb = ttk.Scrollbar(self.frame, command=self.area_texto.yview, orient="vertical")
-        vsb.grid(row=0, column=1, sticky="ns")
+    def get_glade_content(self):
+        return '''
+        <interface>
+          <requires lib="gtk+" version="3.0"/>
+          <object class="GtkWindow" id="main_window">
+            <property name="title">Calculadora de Área COBOL</property>
+            <property name="default_width">600</property>
+            <property name="default_height">600</property>
+            <child>
+              <object class="GtkGrid" id="main_grid">
+                <property name="column_spacing">10</property>
+                <property name="row_spacing">10</property>
+                <property name="margin">10</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolled_window">
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkTextView" id="area_texto">
+                        <property name="wrap_mode">GTK_WRAP_NONE</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButtonBox" id="button_box">
+                    <property name="layout_style">spread</property>
+                    <property name="hexpand">true</property>
+                    <child>
+                      <object class="GtkButton" id="botao_calcular">
+                        <property name="label">Calcular Área</property>
+                        <signal name="clicked" handler="on_calcular_area" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="botao_limpar">
+                        <property name="label">Limpar</property>
+                        <signal name="clicked" handler="on_limpar_area" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_resultado">
+                    <property name="label"></property>
+                    <property name="hexpand">true</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkTreeView" id="treeview">
+                    <property name="model">liststore</property>
+                    <property name="vexpand">true</property>
+                    <property name="hexpand">true</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <object class="GtkListStore" id="liststore">
+            <columns>
+              <column type="gchararray"/>
+              <column type="gchararray"/>
+              <column type="gint"/>
+              <column type="gint"/>
+            </columns>
+          </object>
+        </interface>
+        '''
 
-        self.area_texto.configure(yscrollcommand=vsb.set, xscrollcommand=False)
+    def configurar_treeview(self):
+        for i, column_title in enumerate(["Nome do Campo", "Tipo", "Tamanho", "Ocorrências"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+            self.treeview.append_column(column)
 
-        self.frame.grid_rowconfigure(0, weight=1)
-        self.frame.grid_columnconfigure(0, weight=1)
-       
-        self.area_texto.grid(row=0, column=0, sticky="nsew")
+    def on_calcular_area(self, button):
+        area_cobol = self.area_texto.get_buffer()
+        start_iter, end_iter = area_cobol.get_bounds()
+        area_text = area_cobol.get_text(start_iter, end_iter, True)
+        area_total, campos = Calculo.calcularAreaTotal(area_text)
+        self.label_resultado.set_text(f"Área total do layout: {area_total} bytes")
+        self.exibir_campos(campos)
 
-    def criarBotoes(self):
-        self.frame_botoes = ttk.Frame(self.root)
-        self.frame_botoes.grid(row=1, column=0, columnspan=2, pady=5)
-        self.botao_calcular = ttk.Button(
-            self.frame_botoes, text="Calcular Área", command=self.calcularArea)
-        self.botao_calcular.grid(row=0, column=0, padx=5)
-        self.botao_limpar = ttk.Button(
-            self.frame_botoes, text="Limpar", command=self.limparAreaTexto)
-        self.botao_limpar.grid(row=0, column=1, padx=5)
-        self.botao_tema = ttk.Button(
-            self.frame_botoes, text="Tema", command=self.mudarTema)
-        self.botao_tema.grid(row=0, column=2, padx=5)
+    def on_limpar_area(self, button):
+        area_cobol = self.area_texto.get_buffer()
+        area_cobol.set_text("")
+        self.liststore.clear()
 
-    def criarLabelResultado(self):
-        self.label_resultado = ttk.Label(
-            self.root, text="", font=("Helvetica", 10, "bold"))
-        self.label_resultado.grid(row=2, column=0, columnspan=2, pady=5)
-
-    def criarArvoreCampos(self):
-        self.frame_arvore = ttk.Frame(self.root)
-        self.frame_arvore.grid(row=3, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
-        self.arvore = ttk.Treeview(self.frame_arvore, columns=(
-            'Nome', 'Tipo', 'Tamanho', 'Ocorrências'), show='headings')
-        self.arvore.heading('Nome', text='Nome do Campo')
-        self.arvore.heading('Tipo', text='Tipo')
-        self.arvore.heading('Tamanho', text='Tamanho')
-        self.arvore.heading('Ocorrências', text='Ocorrências')
-        self.barra_rolagem = ttk.Scrollbar(
-            self.frame_arvore, orient="vertical", command=self.arvore.yview)
-        self.arvore.configure(yscrollcommand=self.barra_rolagem.set)
-        self.arvore.grid(row=0, column=0, sticky="nsew")
-        self.barra_rolagem.grid(row=0, column=1, sticky="ns")
-        self.frame_arvore.grid_rowconfigure(0, weight=1)
-        self.frame_arvore.grid_columnconfigure(0, weight=1)
-
-    def calcularArea(self):
-        area_cobol = self.area_texto.get(1.0, tk.END)
-        area_total, campos = Calculo.calcularAreaTotal(area_cobol)
-        self.label_resultado.config(text=f"Área total do layout: {area_total} bytes")
-        self.exibirCampos(campos)
-
-    def limparAreaTexto(self):
-        self.area_texto.delete(1.0, tk.END)
-        self.arvore.delete(*self.arvore.get_children())
-
-    def exibirCampos(self, campos):
-        self.arvore.delete(*self.arvore.get_children())
+    def exibir_campos(self, campos):
+        self.liststore.clear()
         for campo in campos:
-            self.arvore.insert('', 'end', values=campo)
-            print(campo)
+            self.liststore.append(campo)
 
-    def mudarTema(self):
-        sv_ttk.toggle_theme()
 
 class Calculo:
     @staticmethod
@@ -95,7 +157,7 @@ class Calculo:
         redefinidos = set()
         redefinindo = False
         nivel_redefine = 0
-        fatores_ocorrencia = [1] * 50  # Lista inicializada para 50 níveis de hierarquia
+        fatores_ocorrencia = [1] * 50
 
         for linha in linhas:
             match_redefine = re.match(r'\s*(\d+)\s+(\S+)\s+REDEFINES\s+(\S+)\.', linha)
@@ -117,11 +179,11 @@ class Calculo:
             expressao = (
                 r'\s*(\d+)\s+(\S+)\s+PIC\s+([9XZS])'
                 r'(?:\((\d+)\))?'
-                r'(?:V9\((\d+)\))?'  # Captura campos com ponto decimal
-                r'(?:\s+OCCURS\s+(\d+))?' # Captura ocorrências
+                r'(?:V9\((\d+)\))?'
+                r'(?:\s+OCCURS\s+(\d+))?'
                 r'(?:\s+(BINARY|COMP(?:-1|-2|-3|-4|-5)?))?'
             )
-            
+
             match_campo = re.match(expressao, linha)
             if match_campo:
                 nivel = int(match_campo.group(1))
@@ -171,11 +233,11 @@ class Calculo:
 
         return total_area, campos
 
+
 def main():
-    root = tk.Tk()
-    appCalcGUI(root)
-    sv_ttk.use_light_theme()
-    root.mainloop()
+    app = appCalcGUI()
+    Gtk.main()
+
 
 if __name__ == "__main__":
     main()
