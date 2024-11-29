@@ -108,7 +108,7 @@ class MainGui:
             self.frm_hub2.destroy()
 
         # Botão fechar -> compactar menu
-        img = customtkinter.CTkImage(Image.open('pics//fechar.png'), size=(40, 40))
+        img = customtkinter.CTkImage(Image.open('Exemplo de Cadastro/pics/fechar.png'), size=(40, 40))
         btn_hub = customtkinter.CTkButton(self.frm_hub2, image=img, width=50, text='',
                                                 border_width=0, corner_radius=0, command=destruir,
                                                 fg_color='transparent', hover_color='gray')
@@ -131,22 +131,22 @@ class MainGui:
         self.frame = frame
 
         # Botão abrir -> expandir menu
-        img = customtkinter.CTkImage(Image.open('pics//abrir.png'), size=(40, 40))
+        img = customtkinter.CTkImage(Image.open('Exemplo de Cadastro/pics/abrir.png'), size=(40, 40))
         btn_hub = customtkinter.CTkButton(self.frm_hub1, image=img, width=50, text='',
                                                 border_width=0, corner_radius=0, command=self.frame_menu_expandido,
                                                 fg_color='transparent', hover_color='gray')
         btn_hub.place(x=5, y=5)
 
         # Criar botão trocar modo de aparência
-        self.img_modo = customtkinter.CTkImage(light_image=Image.open('pics//mudar_escuro.png'),
-                                            dark_image=Image.open('pics//mudar_claro.png'), size=(40, 40))
+        self.img_modo = customtkinter.CTkImage(light_image=Image.open('Exemplo de Cadastro/pics/mudar_escuro.png'),
+                                            dark_image=Image.open('Exemplo de Cadastro/pics/mudar_claro.png'), size=(40, 40))
         self.btn_modo = customtkinter.CTkButton(self.frame, image=self.img_modo, width=50, text='',
                                             border_width=0, corner_radius=0, command=self.modo_aparencia,
                                             fg_color='transparent', hover_color='gray')
         self.btn_modo.place(x=5, y=787)
 
         # Botão sair do programa
-        img_sair = customtkinter.CTkImage(Image.open('pics//sair.png'), size=(40, 40))
+        img_sair = customtkinter.CTkImage(Image.open('Exemplo de Cadastro/pics/sair.png'), size=(40, 40))
         btn_sair = customtkinter.CTkButton(self.frame, image=img_sair, width=50, text='',
                                                 border_width=0, corner_radius=0, command=self.sair_app,
                                                 fg_color='transparent', hover_color='gray')

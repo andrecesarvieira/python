@@ -4,7 +4,7 @@ import sys
 try:
     import gi
 except ModuleNotFoundError:
-    print("Erro: O módulo 'gi' não está instalado. Você pode instalá-lo usando o comando 'pip install PyGObject'.")
+    print("Erro: O módulo 'gi' não está instalado. Instalar usando o comando 'pip install PyGObject'.")
     sys.exit(1)
 
 

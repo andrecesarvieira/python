@@ -12,7 +12,7 @@ class Notificacao:
   @staticmethod
   def criar(frame_rodape, msg):
         # Criar label de mensagem para o usuário no frame_msg
-        img = customtkinter.CTkImage(Image.open('pics/img_notificacao.png'), size=(18,18))
+        img = customtkinter.CTkImage(Image.open('Exemplo de Cadastro/pics/img_notificacao.png'), size=(18,18))
         
         lbl_msg_img = customtkinter.CTkLabel(frame_rodape, image=img, text='', anchor='w',
                                              compound="left", justify="left")

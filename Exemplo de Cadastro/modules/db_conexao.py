@@ -9,7 +9,7 @@ class ConectarBancodeDados:
   local = f'(' + __qualname__ + ' -> ' + os.path.basename(__file__) + ')'
 
   def __init__(self):
-    self.arquivo = os.path.join('db', 'banco_de_dados.db')
+    self.arquivo = os.path.join('Exemplo de Cadastro/db', 'banco_de_dados.db')
     self.con = None
   
   def conectar(self) -> str:
