@@ -3,7 +3,7 @@ import sys
 import sqlite3
 
 from PyQt6.QtWidgets import QMessageBox
-
+from datetime import datetime
 from calculos import Calculos
 
 # Determina o caminho base dependendo do ambiente de execução
@@ -14,8 +14,11 @@ else:
     # Executando a partir do código fonte
     base_path = os.path.dirname(os.path.abspath(__file__))
 
+# Define o nome do arquivo do banco de dados por mês
+nome_db = f"{datetime.now().strftime('%Y%m')}_ponto.db"
+
 # Define o caminho absoluto para o banco de dados
-db_path = os.path.join(base_path, 'ponto.db')
+db_path = os.path.join(base_path, nome_db)
 
 class BancoDeDados:
     calc = Calculos()
