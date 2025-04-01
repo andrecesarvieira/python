@@ -2,7 +2,7 @@ import os
 import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidgetItem
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QDate
 from datetime import datetime
 from pyponto_tela import Ui_MainWindow
 from bancodedados import BancoDeDados
@@ -36,6 +36,9 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         
+        # Atribuir data do dia para a caixa de texto DATA
+        self.ui.data.setDate(QDate.currentDate())
+
         # Atribuir funções aos cliques
         atribuir_botoes()
 

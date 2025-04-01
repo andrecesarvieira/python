@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>900</width>
-    <height>600</height>
+    <height>570</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,19 +19,19 @@
   <property name="minimumSize">
    <size>
     <width>900</width>
-    <height>600</height>
+    <height>570</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>900</width>
-    <height>600</height>
+    <height>580</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
     <width>900</width>
-    <height>600</height>
+    <height>570</height>
    </size>
   </property>
   <property name="acceptDrops">
@@ -980,7 +980,6 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
