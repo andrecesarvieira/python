@@ -1,4 +1,6 @@
-import os, sys, sqlite3
+import os
+import sys
+import sqlite3
 
 from PyQt6.QtWidgets import QMessageBox
 from datetime import datetime
@@ -17,6 +19,7 @@ nome_db = f"{datetime.now().strftime('%Y%m')}_ponto.db"
 
 # Define o caminho absoluto para o banco de dados
 db_path = os.path.join(base_path, nome_db)
+
 
 class BancoDeDados:
     calc = Calculos()
@@ -59,21 +62,21 @@ class BancoDeDados:
             case 2:
                 cursor.execute("UPDATE ponto SET entrada = ? WHERE data = ?", (registro[1], registro[0]))
             case 3:
-                cursor.execute("UPDATE ponto SET almoco = ? WHERE data = ?", (registro[2], registro[0]))
+                cursor.execute("UPDATE ponto SET almoco = ?, manha = ? WHERE data = ?", (registro[2], registro[5], registro[0]))
             case 4:
-                cursor.execute("UPDATE ponto SET retorno = ?, manha = ? WHERE data = ?", (registro[3], registro[5], registro[0]))
+                cursor.execute("UPDATE ponto SET retorno = ? WHERE data = ?", (registro[3], registro[0]))
             case 5:
                 cursor.execute("UPDATE ponto SET saida = ?, tarde = ?, horas = ? WHERE data = ?", (registro[4], registro[6], registro[7], registro[0]))
 
         self.conn.commit()
-    
+
     def excluir_registro(self, chave):
         cursor = self.conn.cursor()
         cursor.execute("DELETE FROM ponto WHERE data = ?", (chave,))
         try:
             self.conn.commit()
-        except Exception as e:
+        except Exception:
             QMessageBox.warning(None, "Aviso", "Erro ao excluir o registro")
-    
+
     def fechar_banco(self):
         self.conn.close()

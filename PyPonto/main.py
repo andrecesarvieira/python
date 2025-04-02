@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidgetItem
 from PyQt6.QtCore import Qt, QDate
@@ -13,6 +14,7 @@ if getattr(sys, 'frozen', False):
 else:
     base_path = os.path.dirname(os.path.abspath(__file__))
 
+
 class MainWindow(QMainWindow):
     db = BancoDeDados()
     ca = Calculos()
@@ -25,14 +27,14 @@ class MainWindow(QMainWindow):
             self.ui.btnExportar.clicked.connect(self.exportar)
 
         super().__init__()
-                   
+
         # Declaração de variáveis
-        self.lista = ["00/00/0000","00:00","00:00","00:00","00:00","00:00","00:00","00:00"]
+        self.lista = ["00/00/0000", "00:00", "00:00", "00:00", "00:00", "00:00", "00:00", "00:00"]
 
         # UI
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        
+
         # Atribuir data do dia para a caixa de texto DATA
         self.ui.data.setDate(QDate.currentDate())
 
@@ -42,18 +44,18 @@ class MainWindow(QMainWindow):
         # Banco de dados
         self.db.criar_tabela()
         self.popular_tabela()
-    
+
     def popular_tabela(self):
         self.ui.tableWidget.clearContents()
         self.ui.tableWidget.setRowCount(0)
 
         registros = []
         registros = self.db.ler_tabela()
-        
+
         if registros:
             self.ui.tableWidget.setRowCount(len(registros))
             self.ui.tableWidget.setColumnCount(len(registros[0]))
-           
+
             for row_idx, registro in enumerate(registros):
                 for col_idx, valor in enumerate(registro):
                     item = QTableWidgetItem(str(valor))
@@ -80,22 +82,26 @@ class MainWindow(QMainWindow):
                 self.campo = 2
             elif self.lista[2] == "00:00":
                 self.lista[2] = self.ui.almoco.time().currentTime().toString("HH:mm")
+                res = datetime.strptime(self.ca.calcular_duracao(self.lista[1], self.lista[2]), "%H:%M")
+                self.lista[5] = res.strftime("%H:%M")
                 self.campo = 3
             elif self.lista[3] == "00:00":
                 self.lista[3] = self.ui.retorno.time().currentTime().toString("HH:mm")
-                self.lista[5] = self.ca.calcular_duracao(self.lista[1], self.lista[2])
                 self.campo = 4
             elif self.lista[4] == "00:00":
                 self.lista[4] = self.ui.saida.time().currentTime().toString("HH:mm")
-                self.lista[6] = self.ca.calcular_duracao(self.lista[3], self.lista[4])
-                self.lista[7] = self.ca.somar_tempos(self.lista[5], self.lista[6])
+                res = datetime.strptime(self.ca.calcular_duracao(self.lista[3], self.lista[4]), "%H:%M")
+                self.lista[6] = res.strftime("%H:%M")
+                res = self.ca.somar_tempos(self.lista[5], self.lista[6])
+                res_conv = datetime.strptime(res, "%H:%M")
+                self.lista[7] = res_conv.strftime("%H:%M")
                 self.campo = 5
             else:
                 return
 
         self.db.atualizar_tabela(self.campo, self.lista)
         self.popular_tabela()
-    
+
     def inserir(self):
         self.dia = datetime.strptime(self.ui.data.text(), '%d/%m/%Y').strftime('%Y/%m/%d')
         registro = self.db.ler_tabela_data(self.dia)
@@ -106,11 +112,11 @@ class MainWindow(QMainWindow):
             self.lista[2] = self.ui.almoco.text()
             self.lista[3] = self.ui.retorno.text()
             self.lista[4] = self.ui.saida.text()
-            if self.lista[1] and self.lista [2] != "00:00":
-                self.lista[5] = self.ca.calcular_duracao(self.lista[1], self.lista[2])
-            if self.lista[3] and self.lista [4] != "00:00":
+            if self.lista[1] and self.lista[2] != "00:00":
+                self.lista[5] = self.lista[6] = self.ca.calcular_duracao(self.lista[1], self.lista[2])
+            if self.lista[3] and self.lista[4] != "00:00":
                 self.lista[6] = self.ca.calcular_duracao(self.lista[3], self.lista[4])
-            if self.lista[1] and self.lista [2] and self.lista[3] and self.lista [4] != "00:00":                
+            if self.lista[1] and self.lista[2] and self.lista[3] and self.lista[4] != "00:00":
                 self.lista[7] = self.ca.somar_tempos(self.lista[5], self.lista[6])
             self.db.atualizar_tabela(1, self.lista)
             self.popular_tabela()
@@ -127,7 +133,7 @@ class MainWindow(QMainWindow):
     def excluir(self):
         selecao = self.ui.tableWidget.selectedItems()
         total_linhas = {item.row() for item in selecao}
-        
+
         if len(total_linhas) != 1:
             QMessageBox(
                 QMessageBox.Icon.Information,
@@ -141,13 +147,12 @@ class MainWindow(QMainWindow):
         else:
             chave = selecao[0].text()
             res = QMessageBox(
-                    QMessageBox.Icon.Warning,
-                    "Atenção",
-                    f"Confirma a exclusão do registro de {chave}?",
-                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                    self,
-                    flags=Qt.WindowType.WindowStaysOnTopHint
-                ).exec()            
+                QMessageBox.Icon.Warning,
+                "Atenção",
+                f"Confirma a exclusão do registro de {chave}?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                self,
+                flags=Qt.WindowType.WindowStaysOnTopHint).exec()
             if res == QMessageBox.StandardButton.Yes:
                 self.db.excluir_registro(chave)
                 self.popular_tabela()
@@ -174,13 +179,13 @@ class MainWindow(QMainWindow):
         with open(caminho_arquivo, "w", encoding="utf-8") as f:
             for linha in sorted(linhas_selecionadas):
                 # Usa a função auxiliar para recuperar o valor de cada coluna
-                data_str = getCellText(linha, 0)  # data  
-                entrada  = getCellText(linha, 1)  # entrada
-                almoco   = getCellText(linha, 2)  # almoço
-                retorno  = getCellText(linha, 3)  # retorno
-                saida    = getCellText(linha, 4)  # saide
-                manha    = getCellText(linha, 5)  # manhã
-                tarde    = getCellText(linha, 6)  # tarde
+                data_str = getCellText(linha, 0)  # data
+                entrada = getCellText(linha, 1)  # entrada
+                almoco = getCellText(linha, 2)  # almoço
+                retorno = getCellText(linha, 3)  # retorno
+                saida = getCellText(linha, 4)  # saide
+                manha = getCellText(linha, 5)  # manhã
+                tarde = getCellText(linha, 6)  # tarde
 
                 # Verifica se a data está preenchida antes de converter
                 if data_str:
@@ -188,9 +193,9 @@ class MainWindow(QMainWindow):
                         dt = datetime.strptime(data_str, "%Y/%m/%d")
                         data_str = dt.strftime("%d/%b/%y")
                         dia, mes, ano = data_str.split('/')
-                        mes = mes.capitalize() 
+                        mes = mes.capitalize()
                         data_formatada = f"{dia}/{mes}/{ano}"
-                    except Exception as e:
+                    except Exception:
                         data_formatada = data_str
                 else:
                     data_formatada = ""
@@ -211,6 +216,7 @@ class MainWindow(QMainWindow):
 
         QMessageBox.information(self, "Exportação Concluída", f"Arquivo exportado com sucesso:\n{caminho_arquivo}")
         self.ui.tableWidget.clearSelection()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
