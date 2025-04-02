@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
                 self.lista[5] = res.strftime("%H:%M")
             if self.lista[3] and self.lista[4] != "00:00":
                 res = datetime.strptime(self.ca.calcular_duracao(self.lista[3], self.lista[4]), "%H:%M")
-                self.lista[6] = res.strftime("%H:%M")                
+                self.lista[6] = res.strftime("%H:%M")
             if self.lista[1] and self.lista[2] and self.lista[3] and self.lista[4] != "00:00":
                 res = self.ca.somar_tempos(self.lista[5], self.lista[6])
                 res_conv = datetime.strptime(res, "%H:%M")
