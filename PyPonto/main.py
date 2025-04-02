@@ -186,7 +186,10 @@ class MainWindow(QMainWindow):
                 if data_str:
                     try:
                         dt = datetime.strptime(data_str, "%Y/%m/%d")
-                        data_formatada = dt.strftime("%d/%b/%y").capitalize()
+                        data_str = dt.strftime("%d/%b/%y")
+                        dia, mes, ano = data_str.split('/')
+                        mes = mes.capitalize() 
+                        data_formatada = f"{dia}/{mes}/{ano}"
                     except Exception as e:
                         data_formatada = data_str
                 else:
