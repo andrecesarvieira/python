@@ -1,6 +1,4 @@
-import os
-import sys
-import sqlite3
+import os, sys, sqlite3
 
 from PyQt6.QtWidgets import QMessageBox
 from datetime import datetime

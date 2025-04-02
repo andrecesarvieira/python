@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidgetItem
 from PyQt6.QtCore import Qt, QDate
@@ -28,8 +27,6 @@ class MainWindow(QMainWindow):
         super().__init__()
                    
         # Declaração de variáveis
-        self.registro = None
-        self.campo = None
         self.lista = ["00/00/0000","00:00","00:00","00:00","00:00","00:00","00:00","00:00"]
 
         # UI
@@ -39,7 +36,7 @@ class MainWindow(QMainWindow):
         # Atribuir data do dia para a caixa de texto DATA
         self.ui.data.setDate(QDate.currentDate())
 
-        # Atribuir funções aos cliques
+        # Atribuir funções aos botões
         atribuir_botoes()
 
         # Banco de dados
@@ -50,14 +47,14 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.clearContents()
         self.ui.tableWidget.setRowCount(0)
 
-        self.registros = []
-        self.registros = self.db.ler_tabela()
+        registros = []
+        registros = self.db.ler_tabela()
         
-        if self.registros:
-            self.ui.tableWidget.setRowCount(len(self.registros))
-            self.ui.tableWidget.setColumnCount(len(self.registros[0]))
+        if registros:
+            self.ui.tableWidget.setRowCount(len(registros))
+            self.ui.tableWidget.setColumnCount(len(registros[0]))
            
-            for row_idx, registro in enumerate(self.registros):
+            for row_idx, registro in enumerate(registros):
                 for col_idx, valor in enumerate(registro):
                     item = QTableWidgetItem(str(valor))
                     item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -65,15 +62,19 @@ class MainWindow(QMainWindow):
 
     def registrar(self):
         # Verifica se já existe a chave do banco de dados
-        self.dia = self.ui.data.date().currentDate().toString("yyyy/MM/dd")
-        self.registro = self.db.ler_tabela_data(self.dia)
+        dia = self.ui.data.date().currentDate().toString("yyyy/MM/dd")
+        registro = self.db.ler_tabela_data(dia)
 
-        if not self.registro:
+        self.campo = None
+        if not registro:
             self.lista[0] = self.ui.data.date().currentDate().toString("yyyy/MM/dd")
             self.lista[1] = self.ui.entrada.time().currentTime().toString("HH:mm")
-            self.db.atualizar_tabela(1, self.lista)
+            self.campo = 1
+            self.db.atualizar_tabela(self.campo, self.lista)
+            self.popular_tabela()
+            return
         else:
-            self.lista = list(self.registro)
+            self.lista = list(registro)
             if self.lista[1] == "00:00":
                 self.lista[1] = self.ui.entrada.time().currentTime().toString("HH:mm")
                 self.campo = 2
@@ -97,9 +98,9 @@ class MainWindow(QMainWindow):
     
     def inserir(self):
         self.dia = datetime.strptime(self.ui.data.text(), '%d/%m/%Y').strftime('%Y/%m/%d')
-        self.registro = self.db.ler_tabela_data(self.dia)
+        registro = self.db.ler_tabela_data(self.dia)
 
-        if not self.registro:
+        if not registro:
             self.lista[0] = self.dia
             self.lista[1] = self.ui.entrada.text()
             self.lista[2] = self.ui.almoco.text()
@@ -124,11 +125,10 @@ class MainWindow(QMainWindow):
             ).exec()
 
     def excluir(self):
-        self.selecao = self.ui.tableWidget.selectedItems()
-        self.total_linhas = {item.row() for item in self.selecao}
-        print(self.total_linhas)
+        selecao = self.ui.tableWidget.selectedItems()
+        total_linhas = {item.row() for item in selecao}
         
-        if len(self.total_linhas) != 1:
+        if len(total_linhas) != 1:
             QMessageBox(
                 QMessageBox.Icon.Information,
                 "Atenção",
@@ -139,17 +139,17 @@ class MainWindow(QMainWindow):
             ).exec()
             self.ui.tableWidget.clearSelection()
         else:
-            self.chave = self.selecao[0].text()
+            chave = selecao[0].text()
             res = QMessageBox(
                     QMessageBox.Icon.Warning,
                     "Atenção",
-                    f"Confirma a exclusão do registro de {self.chave}?",
+                    f"Confirma a exclusão do registro de {chave}?",
                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                     self,
                     flags=Qt.WindowType.WindowStaysOnTopHint
                 ).exec()            
             if res == QMessageBox.StandardButton.Yes:
-                self.db.excluir_registro(self.chave)
+                self.db.excluir_registro(chave)
                 self.popular_tabela()
 
     def exportar(self):
@@ -174,19 +174,19 @@ class MainWindow(QMainWindow):
         with open(caminho_arquivo, "w", encoding="utf-8") as f:
             for linha in sorted(linhas_selecionadas):
                 # Usa a função auxiliar para recuperar o valor de cada coluna
-                data_str = getCellText(linha, 0)   # formato: yyyy/MM/dd
-                entrada  = getCellText(linha, 1)
-                almoco   = getCellText(linha, 2)
-                retorno  = getCellText(linha, 3)
-                saida    = getCellText(linha, 4)
-                manha    = getCellText(linha, 5)   # Duração manhã
-                tarde    = getCellText(linha, 6)   # Duração tarde
+                data_str = getCellText(linha, 0)  # data  
+                entrada  = getCellText(linha, 1)  # entrada
+                almoco   = getCellText(linha, 2)  # almoço
+                retorno  = getCellText(linha, 3)  # retorno
+                saida    = getCellText(linha, 4)  # saide
+                manha    = getCellText(linha, 5)  # manhã
+                tarde    = getCellText(linha, 6)  # tarde
 
                 # Verifica se a data está preenchida antes de converter
                 if data_str:
                     try:
                         dt = datetime.strptime(data_str, "%Y/%m/%d")
-                        data_formatada = dt.strftime("%d/%b/%y")  # Ex.: 20/Mar/25
+                        data_formatada = dt.strftime("%d/%b/%y").capitalize()
                     except Exception as e:
                         data_formatada = data_str
                 else:
