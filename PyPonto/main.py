@@ -113,11 +113,15 @@ class MainWindow(QMainWindow):
             self.lista[3] = self.ui.retorno.text()
             self.lista[4] = self.ui.saida.text()
             if self.lista[1] and self.lista[2] != "00:00":
-                self.lista[5] = self.lista[6] = self.ca.calcular_duracao(self.lista[1], self.lista[2])
+                res = datetime.strptime(self.ca.calcular_duracao(self.lista[1], self.lista[2]), "%H:%M")
+                self.lista[5] = res.strftime("%H:%M")
             if self.lista[3] and self.lista[4] != "00:00":
-                self.lista[6] = self.ca.calcular_duracao(self.lista[3], self.lista[4])
+                res = datetime.strptime(self.ca.calcular_duracao(self.lista[3], self.lista[4]), "%H:%M")
+                self.lista[6] = res.strftime("%H:%M")                
             if self.lista[1] and self.lista[2] and self.lista[3] and self.lista[4] != "00:00":
-                self.lista[7] = self.ca.somar_tempos(self.lista[5], self.lista[6])
+                res = self.ca.somar_tempos(self.lista[5], self.lista[6])
+                res_conv = datetime.strptime(res, "%H:%M")
+                self.lista[7] = res_conv.strftime("%H:%M")
             self.db.atualizar_tabela(1, self.lista)
             self.popular_tabela()
         else:
