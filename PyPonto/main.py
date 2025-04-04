@@ -1,4 +1,6 @@
 import os
+import platform
+import subprocess
 import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidgetItem
@@ -222,8 +224,27 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.clearSelection()
 
 
+def sistema_escuro_gnome():
+    try:
+        resultado = subprocess.run(
+            ["gsettings", "get", "org.gnome.desktop.interface", "color-scheme"],
+            capture_output=True, text=True
+        )
+        return "prefer-dark" in resultado.stdout
+    except Exception:
+        return False
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    if platform.system() == "Linux" and sistema_escuro_gnome():
+        try:
+            import qdarkstyle
+            app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6())
+        except ImportError:
+            print("Instale o qdarkstyle: pip install qdarkstyle")
+    else:
+        app.setStyle("Fusion")
     window = MainWindow()
     app.aboutToQuit.connect(window.db.fechar_banco)
     window.show()
