@@ -224,7 +224,7 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.clearSelection()
 
 
-def sistema_escuro_gnome():
+def dark_mode():
     try:
         resultado = subprocess.run(
             ["gsettings", "get", "org.gnome.desktop.interface", "color-scheme"],
@@ -237,7 +237,8 @@ def sistema_escuro_gnome():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    if platform.system() == "Linux" and sistema_escuro_gnome():
+    # Verifica qual modo de cor o Gnome está
+    if platform.system() == "Linux" and dark_mode():
         try:
             import qdarkstyle
             app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6())
